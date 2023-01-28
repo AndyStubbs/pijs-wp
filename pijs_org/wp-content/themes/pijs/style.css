@@ -1,0 +1,314 @@
+/*
+Theme Name: pijs
+Theme URI: https://pijs.org
+Author: Andy stubbs
+Author URI: https://pijs.org
+Description: A custom theme for my website
+Version: 1.0
+Tested up to: 6.1
+Text Domain: pijs
+Requires PHP: 7.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Copyright: (c) Andy Stubbs
+*/
+
+/* 
+	Add your CSS styles here
+*/
+
+/*
+	GLOBAL COLORS
+	Light Grey: 	#AAAAAA
+	Dark Grey: 		#555555
+	Black:			#000000
+	Off Black:		#141414
+	Off Black 2:	#202020
+	Off Black 3:	#393939
+	White:			#FFFFFF
+	Red 1:			#FF1212
+	Green:			#00AA00
+	Blue:			#1212AA
+	Medium Blue:	#2424AA
+	Dark Blue:		#121264
+	Cyan: 			#7D9EFF
+*/
+@font-face {
+	font-family: "IBM_FONT_8_14";
+	src: url( "fonts/WebPlus_IBM_EGA_8x14.woff" ) format( "woff" );
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: "IBM_FONT_8_8";
+	src: url( "fonts/WebPlus_IBM_EGA_8x8.woff" ) format( "woff" );
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	font-family: IBM_FONT_8_8, monospace;
+	background-color: #202020;
+	color: #FFFFFF;
+	margin: 0;
+	font-size: 16px;
+	line-height: 20px;
+}
+
+body .page-8-14 {
+	font-family: IBM_FONT_8_14, monospace;
+	font-size: 28px;
+	line-height: 32px;
+}
+
+.page-doc article {
+	padding: 0px 25px;
+}
+
+a {
+	color: #AAAAAA;
+}
+
+a:hover {
+	color:#555555;
+}
+
+section {
+	margin: 45px 0;
+}
+
+header {
+	font-family: IBM_FONT_8_8, monospace;
+	position: sticky;
+	top: 0;
+	background-color: #141414;
+	font-size: 16px;
+	line-height: 16px;
+}
+
+header .page {
+	display: flex;
+	justify-content: space-between;
+}
+
+header nav a:hover {
+	background-color: #ddd;
+}
+
+.inline, header nav, header li {
+	display: inline-block;
+}
+
+header ul {
+	margin: 0;
+}
+
+header li {
+	text-align: center;
+}
+
+header a {
+	/*color: #50ce37;*/
+	text-decoration: none;
+	display: inline-block;
+	padding: 0;
+	width: 180px;
+	white-space: pre-line;
+}
+
+/*
+header a:hover {
+	color: #c3e70d;
+}
+*/
+
+main {
+	min-height: calc(100vh - 220px);
+}
+
+.page {
+	margin: auto;
+	max-width: 1200px;
+	width: 100%;
+}
+
+.hero {
+	padding: 40px 125px 40px 125px;
+	/*margin: 120px 0 80px 0;*/
+	margin: 0;
+}
+
+.hero h1 {
+	font-family: IBM_FONT_8_14, monospace;
+	font-size: 36px;
+	line-height: 52px;
+	text-align: center;
+	margin: 0;
+	font-size: 36px;
+}
+
+.hero img {
+	width: 300px;
+	image-rendering: pixelated;
+}
+
+.action div {
+	text-align: center;
+}
+
+.intro {
+	display: flex;
+	justify-content: space-evenly;
+	padding: 0 35px;
+}
+
+.intro article {
+	padding: 18px;
+}
+
+.intro h2 {
+	font-weight: normal;
+	color: #555555;
+	margin-bottom: 4px;
+}
+
+.intro p {
+	margin: 0;
+}
+
+.showcase {
+	padding: 52px;
+}
+
+footer {
+	margin-top: 52px;
+	border-top: 1px solid #555555;
+	z-index: 2;
+	position: relative;
+	background-color: #141414;
+	padding-bottom: 15px;
+	padding-top: 15px;
+}
+
+footer section {
+	display: flex;
+	justify-content: space-evenly;
+	margin: 15px 0;
+}
+
+.retro {
+	color: #FF1212;
+}
+
+.accent {
+	color: #89bdff;
+}
+
+.btn-8-14 {
+	font-family: IBM_FONT_8_14, monospace !important;
+}
+
+.btn-retro {
+	text-decoration: none;
+	display: inline-block;
+	color: #fff;
+	background-color: #555555;
+	text-align: center;
+	padding: 4px;
+	box-shadow: 4px 4px 0 0 #000000;
+	outline: none;
+	font-family: IBM_FONT_8_8, monospace;
+	border: none;
+	margin: 4px;
+	min-width: 80px;
+}
+
+.btn-retro:hover {
+	background-color: #AAAAAA;
+	color: #000000;
+	cursor: pointer;
+}
+
+.btn-retro:active {
+	transform: translate(2px, 2px);
+	box-shadow: 2px 2px 0 0 #000000;
+}
+
+.btn-retro:disabled {
+	transform: translate(0, 0);
+	box-shadow: 4px 4px 0 0 #000000;
+	opacity: 0.5;
+	background-color: #AAAAAA;
+	color: #000000;
+}
+
+.btn-large {
+	font-size: 28px;
+	line-height: 28px;
+	margin-top: 14px;
+	margin-right: 14px;
+	padding: 8px;
+	box-shadow: 8px 8px 0 0 #000000;
+}
+
+.btn-large:active {
+	transform: translate(3px, 3px);
+	box-shadow: 4px 4px 0 0 #000000;
+}
+
+.btn-red {
+	background-color: #FF1212;
+}
+
+
+
+.main-navigation .page_item_has_children  {
+	position: relative;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.main-navigation a::before {
+	content: "╔════════╗ ║ ";
+}
+
+.main-navigation a::after {
+	content: " ║ ╚════════╝";
+}
+
+.main-navigation .children {
+	display: none;
+	position: absolute;
+	background-color: #141414;
+	z-index: 1;
+	padding: 0;
+	line-height: 0;
+}
+
+.main-navigation .children a {
+	padding: 0px;
+	text-decoration: none;
+	display: block;
+	width: 260px;
+	line-height: 16px;
+}
+
+.main-navigation .children a p {
+	margin: 0;
+	padding: 0;
+	line-height: 16px;
+}
+
+.main-navigation .children a:hover {
+	background-color: #ddd;
+}
+
+.page_item_has_children:hover .children {
+	display: block;
+}
+
+#showcase {
+	width: 900px;
+	height: 600px;
+}
