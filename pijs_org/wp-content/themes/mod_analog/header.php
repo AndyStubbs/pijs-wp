@@ -29,13 +29,18 @@
 		</div><!-- .site-branding -->
 
 		<nav id="header-navigation" class="main-navigation">
-			<!-- [MOD_PIJS commented out menu] button class="menu-toggle" aria-controls="primary-menu" data-menu="primary-menu" aria-expanded="false">
+			<!-- [MOD_PIJS] commented out menu] button class="menu-toggle" aria-controls="primary-menu" data-menu="primary-menu" aria-expanded="false">
 				<span class="button-menu"><?php esc_html_e('Menu', 'analog' ); ?></span>
 			</button-->
 			<?php
 			wp_nav_menu( array(
 				'theme_location' => 'menu-1',
 				'menu_id'        => 'primary-menu'
+			) );
+			/* [MOD_PIJS] Adding a menu for small screens */
+			wp_nav_menu( array(
+				'theme_location' => 'menu-3',
+				'menu_id'        => 'primary-mobile'
 			) );
 			?>
 		</nav><!-- #site-navigation -->

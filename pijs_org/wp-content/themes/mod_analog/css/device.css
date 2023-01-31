@@ -153,9 +153,11 @@ smaller than 768
         top: -12px;
     }
 
+	/* [MOD_PIJS]
     .main-navigation .menu ul > li.menu-item-has-children > a:after {
         content: "\f347" !important;
     }
+	*/
 
     .main-navigation .menu ul li {
         margin-top: -1px;

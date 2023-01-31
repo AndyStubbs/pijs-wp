@@ -2195,7 +2195,7 @@ body.force-text-hyphens .entry-summary {
 /*--------------------------------------------------------------
 *
 *
-* MOD_PIJS - Styles below this point are added by my mod.
+* [MOD_PIJS] - Styles below this point are added by my mod.
 *
 *
 *--------------------------------------------------------------*/
@@ -2238,7 +2238,6 @@ body .main-navigation .menu .sub-menu {
 .main-navigation .sub-menu a {
 	width: 204px;
 	color: #a0a0a0;
-
 }
 
 .main-navigation .menu {
@@ -2258,6 +2257,18 @@ body .main-navigation .menu .sub-menu {
 .main-navigation .menu > li > a:hover {
 	color: #c0c0c0;
 	border: 8px double;
+}
+
+.main-navigation .menu ul > li.menu-item-has-children > a:after {
+	/*content: "\f107";*/
+	font-family: Fontello;
+	vertical-align: middle;
+	margin-left: 5px;
+	font-size: 1em;
+}
+
+.main-navigation .menu-menu-2-container {
+	display: none;
 }
 
 .content-area {
@@ -2311,7 +2322,6 @@ body.home .entry-title {
 img {
 	border: none !important;
 }
-
 
 .btn-retro {
 	text-decoration: none;
@@ -2371,9 +2381,9 @@ code, pre {
 }
 
 @media screen and (max-width: 1200px) {
-  body.no-sidebar .site-content {
-    width: 100%;
-  }
+	body.no-sidebar .site-content {
+		width: 100%;
+	}
 	body.no-sidebar .site-main {
 		width: 95%;
 	}
@@ -2383,5 +2393,24 @@ code, pre {
 @media screen and (max-width: 850px) {
 	.columns {
 		display: block;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.main-navigation .menu-menu-1-container {
+		display: none;
+	}
+	.main-navigation .menu-menu-2-container {
+		display: block;
+	}
+	.main-navigation .menu ul > li.menu-item-has-children > a:after {
+		content: "\f107";
+		font-family: Fontello;
+		vertical-align: middle;
+		margin-left: 5px;
+		font-size: 1em;
+	}
+	.main-navigation .sub-menu a {
+		width: 148px;
 	}
 }
