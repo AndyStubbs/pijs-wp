@@ -2215,6 +2215,15 @@ body .main-navigation .menu a {
 	outline: none;
 }
 
+body .main-navigation li.menu-item-has-children.menu-open > a::after,
+body .main-navigation .menu ul > li.menu-item-has-children.menu-open > a:after
+ {
+	content: "\f106";
+	font-family: Fontello;
+	vertical-align: middle;
+	margin-left: 5px;
+}
+
 body .main-navigation .menu .sub-menu {
 	border: 8px double;
 	background-color: black;
@@ -2410,7 +2419,21 @@ code, pre {
 		margin-left: 5px;
 		font-size: 1em;
 	}
+	body .main-navigation .menu .sub-menu {
+		top: -8px !important;
+	}
 	.main-navigation .sub-menu a {
 		width: 148px;
+	}
+}
+
+@media screen and (max-width: 460px) {
+	.main-navigation .menu {
+		display: flex;
+		justify-content: flex-start;
+	}
+	.main-navigation .menu > li > a {
+		width: 130px;
+		margin: 0 5px;
 	}
 }

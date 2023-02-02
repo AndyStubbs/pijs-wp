@@ -32,6 +32,10 @@ jQuery(function($) {
 
     $(document).on('click', '.menu-item-has-children > a', function(e) {
         e.preventDefault();
+		//$(this).parent().children('.sub-menu').css("display", "block");
+		//setTimeout( function () {
+		$(this).closest("li").toggleClass("menu-open");
+		//} );
         var menuToggle = $(this).parent().children('.sub-menu');
         menuToggle.slideToggle( tgl, function() {
             $(this).find('ul').hide(tgl).removeAttr('style');
@@ -39,7 +43,18 @@ jQuery(function($) {
     });
 
     $('.site-branding, .custom-header, #content, #colophon').on('click', function() {
-        $('.sub-menu').hide(tgl).removeAttr('style');
+        //$('.sub-menu').hide(tgl).removeAttr('style');
+		//let $subMenus = $(".menu-open .sub-menu");
+		let $menuOpen = $( ".menu-open" );
+		$menuOpen.closest("li").find(".sub-menu").first().slideToggle( tgl, function () {
+			$(this).find('ul').hide(tgl).removeAttr('style');
+		});
+		$(".menu-open").removeClass("menu-open");
+		
+		
+		//setTimeout(function () {
+		//	$subMenus.css("display", "" );
+		//}, 1000);
     });
 
 });
