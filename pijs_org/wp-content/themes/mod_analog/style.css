@@ -2211,6 +2211,10 @@ body .main-navigation {
 	height: 55px;
 }
 
+body .main-navigation .menu > li {
+	max-height: 55px;
+}
+
 body .main-navigation .menu a {
 	outline: none;
 }
@@ -2397,7 +2401,6 @@ code, pre {
 		width: 95%;
 	}
 }
-
 
 @media screen and (max-width: 850px) {
 	.columns {
