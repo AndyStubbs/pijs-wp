@@ -351,10 +351,11 @@ function analog_theme_footer_info() {
 	$theme 	 = sprintf( esc_html__('Theme %s by %s', 'analog' ), '<strong>AnaLog</strong>', '<a href="https://www.iljester.com/">Il Jester</a>' );
 	$top = sprintf( esc_html__('%sTop%s', 'analog' ), '<a href="#">', ' <span class="barw">&barwedge;</span></a>' );
 	
-	$footer_info  = "<span class='tf analog-powered'>{$powered}</span>";
-	$footer_info .= '<span class="tf sep">//</span>';
-	$footer_info .= "<span class='tf analog-theme-credits'>{$theme}</span>";
-	$footer_info .= '<span class="tf sep">//</span>';
+	$footer_info = '<div>Code licensed under <a href="http://www.apache.org/licenses/">Apache License 2.0</a></div>';
+//	$footer_info .= "<span class='tf analog-powered'>{$powered}</span>";
+//	$footer_info .= '<span class="tf sep">//</span>';
+//	$footer_info .= "<span class='tf analog-theme-credits'>{$theme}</span>";
+//	$footer_info .= '<span class="tf sep">//</span>';
 	$footer_info .= "<span class='tf gototop'>{$top}</span>";
 	
 	echo $footer_info;

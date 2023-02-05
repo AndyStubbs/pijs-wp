@@ -35,7 +35,7 @@ jQuery(function($) {
 		$(this).closest("li").toggleClass("menu-open");
 		var menuToggle = $(this).parent().children('.sub-menu');
 		menuToggle.slideToggle( tgl, function() {
-			$(this).find('ul').hide(tgl).removeAttr('style');
+			//$(this).find('ul').hide(tgl).removeAttr('style');
 		} );
 	});
 

@@ -735,17 +735,16 @@ textarea {
 --------------------------------------------------------------*/
 a, 
 a:visited {
-    text-decoration: none;
-    color: #505050;
+	text-decoration: none;
+	color: #acacac;
 }
 
 a:hover {
-    color: #000;
-    border-bottom: 1px dotted #000001;
+	opacity: 0.75;
 }
 
 a:focus {
-	outline: 2px solid red;
+	outline: 2px dashed #acacac;
 }
 
 a:hover, a:active {
@@ -1380,10 +1379,9 @@ body.admin-bar.logged-in .site-branding.fixed-h {
 
 .page-title {
 	margin: -10px -40px 0;
-    padding: 20px;
-    border-bottom: 3px solid #000;
-    background-color: #ff7272;
-    text-shadow: 0 1px 0 #ff9f9f;
+	padding: 20px;
+	border-bottom: 3px solid #000;
+	text-shadow: 0 1px 0 #000;
 }
 
 .updated:not(.published) {
@@ -2200,7 +2198,7 @@ body.force-text-hyphens .entry-summary {
 *
 *--------------------------------------------------------------*/
 
-.site {
+html, .site {
 	background-color: #202020;
 }
 
@@ -2312,6 +2310,15 @@ body .main-navigation .menu .sub-menu {
 	top: 0px;
 }
 
+body .entry-content a:not(.more-link), .comment-content a {
+	color: #00c9f2;
+}
+
+body .entry-content a:hover:not(.more-link), .comment-content a:hover {
+	opacity: 0.75;
+	color: #00c9f2;
+}
+
 body.home .entry-title {
 	display: none;
 }
@@ -2391,6 +2398,15 @@ img {
 code, pre {
 	background-color: black;
 	color: white;
+}
+
+body footer.site-footer {
+	background-color: #363636;
+	color: #AAAAAA;
+}
+
+body footer .my-site-cp {
+	background-color: #555555;
 }
 
 @media screen and (max-width: 1200px) {
