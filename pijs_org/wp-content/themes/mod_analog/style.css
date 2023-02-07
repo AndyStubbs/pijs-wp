@@ -2410,7 +2410,8 @@ body footer .my-site-cp {
 }
 
 @media screen and (max-width: 1200px) {
-	body.no-sidebar .site-content {
+	body.no-sidebar .site-content,
+	body.no-sidebar .site-footer {
 		width: 100%;
 	}
 	body.no-sidebar .site-main {

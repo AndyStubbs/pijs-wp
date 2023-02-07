@@ -45,12 +45,12 @@ jQuery(function($) {
 			return;
 		}
 		let $menuOpen = $( ".menu-open" );
-		if( $menuOpen.length > 0 ) {
-			$menuOpen.closest("li").find(".sub-menu").first().slideToggle( tgl, function () {
-				$(this).find('ul').hide(tgl).removeAttr('style');
+		$menuOpen.each(function () {
+			$(this).closest("li").find(".sub-menu").first().slideToggle( tgl, function () {
+				//$(this).find('ul').hide(tgl).removeAttr('style');
 			});
-			$menuOpen.removeClass("menu-open");
-		}
+		});
+		$menuOpen.removeClass( "menu-open" );
 	});
 
 });
