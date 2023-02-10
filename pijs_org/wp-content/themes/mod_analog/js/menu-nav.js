@@ -40,7 +40,7 @@ jQuery(function($) {
 	});
 
 	$(document.body).on('click', function(e) {
-		let $underCursor = $(document.elementFromPoint(e.pageX, e.pageY)).closest(".menu-item");
+		let $underCursor = $(document.elementFromPoint(e.clientX, e.clientY)).closest(".menu-item");
 		if( $underCursor.length > 0 ){
 			return;
 		}

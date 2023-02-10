@@ -2343,6 +2343,7 @@ img {
 	border: none !important;
 }
 
+input[type="button"].btn-retro,
 .btn-retro {
 	text-decoration: none;
 	display: inline-block;
@@ -2355,19 +2356,23 @@ img {
 	border: none;
 	margin: 4px;
 	min-width: 80px;
+	font-weight: normal;
 }
 
+input[type="button"].btn-retro:hover,
 .btn-retro:hover {
 	background-color: #AAAAAA;
 	color: #000000;
 	cursor: pointer;
 }
 
+input[type="button"].btn-retro:active,
 .btn-retro:active {
 	transform: translate(2px, 2px);
 	box-shadow: 2px 2px 0 0 #000000;
 }
 
+input[type="button"].btn-retro:disabled,
 .btn-retro:disabled {
 	transform: translate(0, 0);
 	box-shadow: 4px 4px 0 0 #000000;
@@ -2376,6 +2381,7 @@ img {
 	color: #000000;
 }
 
+input[type="button"].btn-large,
 .btn-large {
 	font-size: 28px;
 	line-height: 28px;
@@ -2385,11 +2391,13 @@ img {
 	box-shadow: 8px 8px 0 0 #000000;
 }
 
+input[type="button"].btn-large:active,
 .btn-large:active {
 	transform: translate(3px, 3px);
 	box-shadow: 4px 4px 0 0 #000000;
 }
 
+input[type="button"].btn-red,
 .btn-red {
 	background-color: #FF1212 !important;
 	color: #fff !important;
