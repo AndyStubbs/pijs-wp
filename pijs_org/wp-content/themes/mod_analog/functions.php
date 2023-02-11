@@ -416,3 +416,40 @@ require get_template_directory() . '/inc/customizer.php';
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
+
+
+// Add a custom template option for the blank page.
+function add_blank_page_template_option( $dropdown_args ) {
+	$dropdown_args['show_option_blank_page'] = 'Blank Page';
+	return $dropdown_args;
+}
+
+add_filter( 'page_attributes_dropdown_pages_args', 'add_blank_page_template_option' );
+
+// Add the custom field value for the blank page to the post meta.
+function save_blank_page_template( $post_id ) {
+	if ( ! isset( $_POST['page_template'] ) ) {
+		return;
+	}
+
+	if ( $_POST['page_template'] == 'page-blank.php' ) {
+		update_post_meta( $post_id, '_wp_page_template', 'page-blank.php' );
+	} else {
+		update_post_meta( $post_id, '_wp_page_template', $_POST['page_template'] );
+	}
+}
+
+add_action( 'save_post', 'save_blank_page_template' );
+
+// Use the custom field value to determine if the page should be displayed as a blank page.
+function display_blank_page( $template ) {
+	global $post;
+
+	if ( is_page() && 'page-blank.php' == get_post_meta( $post->ID, '_wp_page_template', true ) ) {
+		$template = get_template_directory() . '/page-blank.php';
+	}
+
+	return $template;
+}
+
+add_filter( 'template_include', 'display_blank_page' );

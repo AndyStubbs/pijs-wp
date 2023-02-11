@@ -8,7 +8,7 @@ Author: Andy Stubbs
 
 class Pijs_Code_Example {
 	private $example_shortcode_name = 'pijs_code_example';
-	private $isFooterActive = false;
+	private $isFirst = true;
 	private $exampleCode = "var examples = [];\n";
 	private $examples = 0;
 
@@ -22,6 +22,9 @@ class Pijs_Code_Example {
 	}
 
 	function register_scripts() {
+		if ( !is_single() && !has_shortcode( get_post()->post_content, $this->example_shortcode_name ) ) {
+			return;
+		}
 		//error_log( "register_scripts function called\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		wp_register_style(
 			'highlight-styles', plugins_url( 'highlights/styles/sunburst.css', __FILE__ )
@@ -38,40 +41,13 @@ class Pijs_Code_Example {
 		wp_register_script(
 			'examples', plugins_url( 'examples.js', __FILE__ ), null, '1.0', true
 		);
+
 		wp_enqueue_style( 'highlight-styles' );
 		wp_enqueue_style( 'example-styles' );
 		wp_enqueue_script( 'pijs', 'https://pijs.org/files/pi-1.0.0.js' );
 		wp_enqueue_script( 'highlight-pack' );
 		wp_enqueue_script( 'apply-highlights' );
 		wp_enqueue_script( 'examples' );
-	}
-
-
-	function process_shortcode_content2( $content ) {
-		$shortcode = $this->example_shortcode_name;
-		$pattern = get_shortcode_regex( array( $shortcode ) );
-		preg_match_all( '/' . $pattern . '/s', $content, $matches );
-		foreach( $matches[ 0 ] as $match ) {
-			$new_content = html_entity_decode( $match, ENT_QUOTES, 'UTF-8' );
-			$new_content = htmlentities( $new_content, ENT_QUOTES, 'UTF-8' );
-			$content = str_replace( $match, $new_content, $content );
-		}
-		return $content;
-	}
-
-	function process_shortcode_content3( $content ) {
-		$shortcode = $this->example_shortcode_name;
-		$pattern = get_shortcode_regex( array( $shortcode ) );
-		preg_match_all( '/' . $shortcode . '\s*\](.*)\[\/' . $shortcode . '/s', $content, $matches );
-		error_log( print_r( $matches, true ) . "\n\n", 3, WP_CONTENT_DIR . '/debug.log' );
-		foreach( $matches[1] as $match ) {
-			$shortcode_content = $match[0];
-			error_log( "$shortcode_content\n\n", 3, WP_CONTENT_DIR . '/debug.log' );
-			$new_content = html_entity_decode( $shortcode_content, ENT_QUOTES, 'UTF-8' );
-			$new_content = htmlentities( $new_content, ENT_QUOTES, 'UTF-8' );
-			$content = str_replace( $shortcode_content, $new_content, $content );
-		}
-		return $content;
 	}
 
 	function process_shortcode_content( $content ) {
@@ -136,8 +112,8 @@ class Pijs_Code_Example {
 			$btnClass = 'class="btn-retro btn-red btn-8-14"';
 			$final .= "<input type='button' $btnClass value='Run' onclick='runExample( $this->examples );'>";
 			$final .= "<input type='button' $btnClass value='Copy' onclick='copyExample( $this->examples );'>";
-			if( !$this->isFooterActive ) {
-				$this->isFooterActive = true;
+			if( $this->isFirst ) {
+				$this->isFirst = false;
 			}
 			$this->examples += 1;
 		}
