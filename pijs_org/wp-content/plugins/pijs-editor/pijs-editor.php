@@ -11,38 +11,90 @@ class Pijs_Editor {
 	function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
 		add_shortcode( 'pijs_playground', array( $this, 'playground_shortcode' ) );
+		add_shortcode( 'pijs_editor', array( $this, 'editor_shortcode' ) );
 		add_action('wp_ajax_playground_run_program', array( $this, 'playground_run_program' ) );
 		add_action('wp_ajax_nopriv_playground_run_program', array( $this, 'playground_run_program' ) );
 	}
 
 	function playground_shortcode() {
-		$content = file_get_contents( plugin_dir_path( __FILE__ ) . 'playground-body.php' );
-		$content .= "<script>" .
-				"var g_monacoPath = '" .  plugins_url( 'monaco-editor', __FILE__ ) . "';" .
-				"var g_ajaxUrl = '" . admin_url( 'admin-ajax.php' ) . "';" .
-			"</script>";
+		$content = file_get_contents( plugin_dir_path( __FILE__ ) . '/playground/playground-body.php' );
+		$content .= $this->get_link_scripts();
 		return $content;
 	}
 
+	function editor_shortcode() {
+		$content = file_get_contents( plugin_dir_path( __FILE__ ) . '/my-editor/editor-body.php' );
+		$content .= $this->get_link_scripts();
+		return $content;
+	}
+
+	function get_link_scripts() {
+		return "<script>" .
+			"var g_monacoPath = '" .  plugins_url( 'libs/monaco-editor', __FILE__ ) . "';" .
+			"var g_ajaxUrl = '" . admin_url( 'admin-ajax.php' ) . "';" .
+		"</script>";
+	}
+
 	function register_scripts() {
-		if ( is_page() && has_shortcode( get_post()->post_content, 'pijs_playground' ) ) {
-			return $this->register_playground_scripts();
+		if( is_page() ) {
+			$content = get_post()->post_content;
+			if( has_shortcode( $content, 'pijs_playground' ) ) {
+				$this->register_common_scripts();
+				return $this->register_playground_scripts();
+			}
+			if( has_shortcode( $content, 'pijs_editor' ) ) {
+				$this->register_common_scripts();
+				return $this->register_editor_scripts();
+			}
 		}
 	}
 
-	function register_playground_scripts() {
+	function register_common_scripts() {
 		wp_register_style(
-			'playground-styles', plugins_url( 'playground.css', __FILE__ )
+			'playground-styles', plugins_url( 'playground/playground.css', __FILE__ )
 		);
 		wp_register_style(
 			'editor-styles', plugins_url( 'editor.css', __FILE__ )
 		);
-		wp_register_script(
-			'monaco-editor', plugins_url( 'monaco-editor/min/vs/loader.js', __FILE__ )
+		wp_register_style(
+			'page-styles', plugins_url( 'my-editor/editor-page.css', __FILE__ )
 		);
 		wp_register_script(
-			'playground', plugins_url( 'playground.js', __FILE__ ), null, '1.0', true
+			'filesaver', plugins_url( 'libs/filesaver.js', __FILE__ )
 		);
+		wp_register_script(
+			'jszip-utils', plugins_url( 'libs/jszip-utils.min.js', __FILE__ )
+		);
+		wp_register_script(
+			'jszip', plugins_url( 'libs/jszip.min.js', __FILE__ )
+		);
+		wp_register_script(
+			'myindexdb', plugins_url( 'libs/db.js', __FILE__ )
+		);
+		wp_register_script(
+			'monaco-editor', plugins_url( 'libs/monaco-editor/min/vs/loader.js', __FILE__ )
+		);
+		wp_register_script(
+			'playground', plugins_url( 'playground/playground.js', __FILE__ ), null, '1.0', true
+		);
+		wp_register_script(
+			'editor-files', plugins_url( 'my-editor/files.js', __FILE__ ), null, '1.0', true
+		);
+		wp_register_script(
+			'editor-util', plugins_url( 'my-editor/util.js', __FILE__ ), null, '1.0', true
+		);
+		wp_register_script(
+			'editor-main', plugins_url( 'my-editor/main.js', __FILE__ ), null, '1.0', true
+		);
+		wp_register_script(
+			'editor-layout', plugins_url( 'my-editor/layout.js', __FILE__ ), null, '1.0', true
+		);
+		wp_register_script(
+			'editor-editor', plugins_url( 'my-editor/editor.js', __FILE__ ), null, '1.0', true
+		);
+	}
+
+	function register_playground_scripts() {
 		//get_latest_version_url( 'pi-extra', '.js' )
 		//error_log( 'pi-extra: ' . get_latest_version_url( 'pi-extra-', '.js' ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		wp_enqueue_style( 'editor-styles' );
@@ -50,6 +102,24 @@ class Pijs_Editor {
 		wp_enqueue_script( 'pijs-extra', get_latest_version_url( 'pi-extra-', '.js' ) );
 		wp_enqueue_script( 'monaco-editor' );
 		wp_enqueue_script( 'playground' );
+	}
+
+	function register_editor_scripts() {
+		//get_latest_version_url( 'pi-extra', '.js' )
+		//error_log( 'pi-extra: ' . get_latest_version_url( 'pi-extra-', '.js' ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		wp_enqueue_style( 'editor-styles' );
+		wp_enqueue_style( 'page-styles' );
+		wp_enqueue_script( 'pijs-extra', get_latest_version_url( 'pi-extra-', '.js' ) );
+		wp_enqueue_script( 'filesaver' );
+		wp_enqueue_script( 'jszip-utils' );
+		wp_enqueue_script( 'jszip' );
+		wp_enqueue_script( 'myindexdb' );
+		wp_enqueue_script( 'monaco-editor' );
+		wp_enqueue_script( 'editor-files' );
+		wp_enqueue_script( 'editor-util' );
+		wp_enqueue_script( 'editor-main' );
+		wp_enqueue_script( 'editor-layout' );
+		wp_enqueue_script( 'editor-editor' );
 	}
 
 	function playground_run_program() {
