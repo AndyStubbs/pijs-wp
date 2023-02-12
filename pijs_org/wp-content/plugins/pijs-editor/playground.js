@@ -129,6 +129,7 @@ var g_editor = ( function ( $ ) {
 			},
 		} );
 	} );
+
 	let $btnHelp = $( "#btn-help" );
 	$btnHelp.on( "click", function () {
 		if( $btnHelp.hasClass( "menu-opened" ) ) {
@@ -144,6 +145,37 @@ var g_editor = ( function ( $ ) {
 		} );
 	} );
 
+	$( "#btn-options" ).on( "click", function () {
+		$( "#myModal" ).show();
+	} );
+	$( document ).ready( function(){
+		// Get the modal
+		var $modal = $( "#myModal" );
+		
+		// Get the button that opens the modal
+		var $btn = $( "#myBtn" );
+		
+		// Get the <span> element that closes the modal
+		var $span = $( ".close" );
+		
+		// When the user clicks the button, open the modal 
+		$btn.click( function(){
+			$modal.css( "display", "block" );
+		});
+		
+		// When the user clicks on <span> (x), close the modal
+		$span.click( function(){
+			$modal.css( "display", "none" );
+		} );
+		
+		// When the user clicks anywhere outside of the modal, close it
+		$( window ).click( function( event ){
+			if( event.target == $modal.get( 0 ) ){
+				$modal.css( "display", "none" );
+			}
+		} );
+	} );
+	
 	createVerticalResize(
 		$( ".help-menu" ).get( 0 ),
 		$( ".vertical-resize-bar" ).get( 0 ),

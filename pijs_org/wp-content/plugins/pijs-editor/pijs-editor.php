@@ -32,6 +32,9 @@ class Pijs_Editor {
 
 	function register_playground_scripts() {
 		wp_register_style(
+			'playground-styles', plugins_url( 'playground.css', __FILE__ )
+		);
+		wp_register_style(
 			'editor-styles', plugins_url( 'editor.css', __FILE__ )
 		);
 		wp_register_script(
@@ -43,6 +46,7 @@ class Pijs_Editor {
 		//get_latest_version_url( 'pi-extra', '.js' )
 		//error_log( 'pi-extra: ' . get_latest_version_url( 'pi-extra-', '.js' ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		wp_enqueue_style( 'editor-styles' );
+		wp_enqueue_style( 'playground-styles' );
 		wp_enqueue_script( 'pijs-extra', get_latest_version_url( 'pi-extra-', '.js' ) );
 		wp_enqueue_script( 'monaco-editor' );
 		wp_enqueue_script( 'playground' );

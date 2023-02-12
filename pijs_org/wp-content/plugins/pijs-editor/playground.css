@@ -1,0 +1,124 @@
+.main-menu {
+	height: 55px;
+}
+.main-menu button {
+	width: 150px;
+	cursor: pointer;
+	margin: 5px;
+	border: none;
+	padding: 10px 0px;
+	vertical-align: text-top;
+}
+.main-menu button:hover {
+	background-color: #888;
+}
+.main-menu button.menu-closed::after {
+	content: "\f107";
+	font-family: Fontello;
+	margin-left: 5px;
+}
+.main-menu button.menu-opened::after {
+	content: "\f106";
+	font-family: Fontello;
+	margin-left: 5px;
+}
+.help-menu {
+	height: 150px;
+	background-color: black;
+	border-top: 1px solid #888;
+	color: #FFF;
+}
+body .main-editor-body {
+	height: calc(100% - 60px);
+}
+body .vertical-resize-bar {
+	background-color: black;
+	height: 10px;
+	cursor: n-resize;
+	display: flex;
+	align-content: center;
+}
+body .vertical-resize-bar div {
+	background-color: #888;
+	height: 2px;
+	margin: auto;
+	width: 100%;
+}
+
+
+
+.modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal .modal-content {
+	background-color: #fefefe;
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #888;
+	display: inline-block;
+	margin-left: 50%;
+	margin-top: 25%;
+	transform: translate(-50%, -50%);
+}
+
+/* The Close Button */
+.modal .close {
+	color: #aaaaaa;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+
+.modal .close:hover,
+.modal .close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+/* Modal Title */
+.modal .modal-title {
+	font-size: 24px;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+/* Input Labels */
+.modal .input-label {
+	font-size: 16px;
+	width: 50%;
+	display: inline-block;
+	text-align: right;
+	padding-right: 10px;
+}
+
+/* Inputs */
+.modal input[type="text"],
+.modal input[type="checkbox"] {
+	font-size: 16px;
+	width: 50%;
+	display: inline-block;
+}
+
+/* Buttons */
+.modal .modal-buttons {
+	text-align: right;
+	margin-top: 20px;
+}
+
+.modal button[type="button"] {
+	font-size: 16px;
+	padding: 10px 20px;
+}
