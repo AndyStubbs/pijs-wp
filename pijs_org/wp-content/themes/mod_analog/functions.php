@@ -451,5 +451,50 @@ function display_blank_page( $template ) {
 
 	return $template;
 }
-
 add_filter( 'template_include', 'display_blank_page' );
+
+function get_latest_version_url( $fileStart, $fileEnd ) {
+	$directory = ABSPATH . 'files';
+	//error_log( "$directory\n", 3, WP_CONTENT_DIR . '/debug.log' );
+	$latestFile = '';
+	$latestVersion = '0.0.0';
+	$files = scandir( $directory );
+
+	foreach( $files as $file ) {
+		if( strpos( $file, $fileStart ) === 0 && strpos( $file, $fileEnd ) !== false ) {
+			$temp = substr( $file, strlen( $fileStart ) );
+			//error_log(  "Trim start: $temp\n", 3, WP_CONTENT_DIR . '/debug.log' );
+			$temp = substr( $temp, 0, strpos( $temp, $fileEnd ) );
+			//error_log(  "Trim end: $temp\n", 3, WP_CONTENT_DIR . '/debug.log' );
+			$parts = explode( ".", $temp );
+			if( !isValidVersion( $parts ) ) {
+				//error_log(  "Not a valid version #\n", 3, WP_CONTENT_DIR . '/debug.log' );
+				continue;
+			}
+			$version = $parts[ 0 ] . "." . $parts[ 1 ] . "." . $parts[ 2 ];
+			//error_log( "Count: " . count( $parts ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+			//error_log( "VersionCompare: " . version_compare( $version, $latestVersion ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+			if( count( $parts ) == 3 && version_compare( $version, $latestVersion ) === 1 ) {
+				$latestFile = $file;
+				$latestVersion = $parts[ 0 ] . "." . $parts[ 1 ] . "." . $parts[ 2 ];
+			}
+		}
+	}
+	$fullPath = get_site_url() . '/files/' . $latestFile;
+	//error_log(  "Latest: $fullPath\n", 3, WP_CONTENT_DIR . '/debug.log' );
+	return $fullPath;
+}
+
+function isValidVersion( $parts ) {
+	if( count( $parts ) !== 3 ) {
+		return false;
+	}
+
+	foreach( $parts as $part ) {
+		if( !is_numeric( $part ) ) {
+			return false;
+		}
+	}
+
+	return true;
+}

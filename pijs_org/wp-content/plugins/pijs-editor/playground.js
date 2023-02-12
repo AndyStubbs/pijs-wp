@@ -104,16 +104,27 @@ var g_editor = ( function ( $ ) {
 
 ( function ( $ ) {
 	$( "#btn-run" ).on( "click", function () {
-		$.ajax({
+		$.ajax( {
 			type: 'POST',
 			url: g_ajaxUrl,
 			data: {
 				action: 'playground_run_program',
-				code: g_editor.getValue(),
+				code: btoa( g_editor.getValue() ),
 			},
-			success: function(response) {
-				if (response.success) {
-					console.log( response );
+			success: function( response ) {
+				if( response.success ) {
+					let href = window.location.href;
+					let base_url = "";
+					if( href.indexOf( "localhost" ) === -1 ) {
+						base_url = "https://www.pijs-run.org/";
+					} else {
+						base_url = "http://localhost/pijs-run.org/";
+					}
+					let windowSettings = "width=950, height=650 top=200,left=200";
+					let w = window.open( base_url + "runs/" + response.project_id, "_blank", windowSettings );
+					if( w ) {
+						w.focus();
+					}
 				}
 			},
 		} );

@@ -22,9 +22,12 @@ class Pijs_Code_Example {
 	}
 
 	function register_scripts() {
-		if ( !is_single() && !has_shortcode( get_post()->post_content, $this->example_shortcode_name ) ) {
-			return;
+		if ( is_page() && has_shortcode( get_post()->post_content, $this->example_shortcode_name ) ) {
+			return $this->register_shortcode_scripts();
 		}
+	}
+
+	function register_shortcode_scripts() {
 		//error_log( "register_scripts function called\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		wp_register_style(
 			'highlight-styles', plugins_url( 'highlights/styles/sunburst.css', __FILE__ )
@@ -44,7 +47,7 @@ class Pijs_Code_Example {
 
 		wp_enqueue_style( 'highlight-styles' );
 		wp_enqueue_style( 'example-styles' );
-		wp_enqueue_script( 'pijs', 'https://pijs.org/files/pi-1.0.0.js' );
+		wp_enqueue_script( 'pijs', get_latest_version_url( 'pi-', '.js' ) );
 		wp_enqueue_script( 'highlight-pack' );
 		wp_enqueue_script( 'apply-highlights' );
 		wp_enqueue_script( 'examples' );
