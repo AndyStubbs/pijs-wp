@@ -26,16 +26,16 @@
 	padding: 5px 10px;
 	cursor: pointer;
 	text-decoration: underline;
+	color: #FFFFFF;
 }
 
 .menu-item:hover {
 	background-color: #1212AA;
-	color: #FFFFFF;
 }
 
 .submenu {
 	position: absolute;
-	font-size: 20px;
+	font-size: 16px;
 	min-width: 150px;
 	background-color: #141414;
 	padding: 0px;
@@ -46,6 +46,7 @@
 .submenu .submenu-item  {
 	cursor: pointer;
 	padding: 5px 10px;
+	color: white;
 }
 
 .subitem-title {
@@ -67,7 +68,7 @@
 	min-width: 300px;
 	background-color: #202020;
 	height: 100%;
-	font-size: 20px;
+	font-size: 16px;
 	padding: 0;
 }
 
@@ -154,6 +155,55 @@
 	height: 100%;
 }
 
+.main-editor-tabs {
+	width: 100%;
+	min-height: 30px;
+	margin: 0;
+	padding: 0;
+	background-color: #393939;
+}
+
+.main-editor-tabs div {
+	display: inline-flex;
+	justify-content: space-between;
+	padding: 0 0 0 10px;
+	width: 240px;
+	font-size: 16px;
+	margin: 0 1px 0 0;
+	cursor: pointer;
+	line-height: 28px;
+	height: 30px;
+	white-space: nowrap;
+}
+
+.main-editor-tabs span {
+	color: #fefefe
+}
+
+.main-editor-tabs input[type="button"] {
+	padding: 0;
+	margin-top: 0;
+	font-size: 16px;
+	text-shadow: none;
+	border: none;
+	background-color: rgb(85, 85, 85);
+}
+
+.main-editor-tabs input[type="button"]:hover {
+	background-color: #acacac;
+}
+
+.main-editor-tabs .close-button {
+	height: 30px;
+}
+
+.main-editor-tabs input[type="button"].btn-retro {
+	margin-top: 0;
+}
+
+.main-editor-tabs div.selected-tab {
+	background-color: #202020;
+}
 
 .popup-overlay {
 	position: absolute;
@@ -166,7 +216,7 @@
 
 .popup {
 	position: absolute;
-	font-size: 20px;
+	font-size: 16px;
 	top: calc(50% - 100px);
 	left: 50%;
 	transform: translate(-50%, -50%);
@@ -178,15 +228,21 @@
 	padding: 5px 20px;
 }
 
+.popup span {
+	color: white;
+}
+
 .popup-title {
 	padding-bottom: 15px;
 	background-color: #555555;
 	display: flex;
 	justify-content: space-between;
+	color: white;
 }
 
 .popup-title .popup-close {
 	float: right;
+	padding: 0px;
 }
 
 .popup-footer {
@@ -229,7 +285,6 @@
 }
 
 .close-button {
-	font-family: IBM_FONT_8_8, monospace;
 	font-size: 20px;
 	color: #FF1212;
 	background-color: #00000000;
@@ -266,17 +321,16 @@
 }
 
 #new-file-name {
-	/*width: 150px;*/
 	width: 330px;
 }
 
 .new-file-popup select {
-	width: 400px;
+	width: 385px;
 }
 
 select, input, button {
-	font-family: IBM_FONT_8_14, monospace;
-	font-size: 20px;
+	font-family: "IBM Plex Mono", monospace;
+	font-size: 16px;
 }
 
 .new-file-popup input {
@@ -296,7 +350,7 @@ select, input, button {
 }
 
 #dragOverPopup {
-	font-size: 20px;
+	font-size: 16px;
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -332,6 +386,9 @@ select, input, button {
 	border: none;
 	cursor: pointer;
 	margin-right: 5px;
+	padding: 0;
+	font-weight: normal;
+	text-shadow: none;
 }
 
 .btn-check::after {
@@ -369,7 +426,7 @@ body .dragFile {
 	color: white;
 	background-color: #343434;
 	cursor: default;
-	font-size: 20px;
+	font-size: 16px;
 }
 
 #contextMenu ul {
@@ -389,6 +446,8 @@ body .dragFile {
 	padding: 4px 35px;
 	border: none;
 	text-align: left;
+	font-weight: normal;
+	font-size: 16px;
 }
 
 #contextMenu li input[type='button']:hover {

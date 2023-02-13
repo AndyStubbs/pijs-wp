@@ -4,7 +4,6 @@ html, body {
 	overflow: hidden;
 	background-color: #202020;
 	color: #FFFFFF;
-	font-family: IBM_FONT_8_14, monospace;
 }
 
 .main-menu {
@@ -19,35 +18,6 @@ html, body {
 	display: inline-block;
 	width: calc(100% - 307px);
 	height: 100%;
-}
-
-.main-editor-tabs {
-	width: 100%;
-	min-height: 30px;
-	margin: 0;
-	padding: 0;
-	background-color: #393939;
-}
-
-.main-editor-tabs div {
-	display: inline-flex;
-	justify-content: space-between;
-	padding: 0 5px;
-	width: 260px;
-	font-size: 20px;
-	margin: 0 1px 0 0;
-	cursor: pointer;
-	line-height: 28px;
-	height: 30px;
-	white-space: nowrap;
-}
-
-.main-editor-tabs div.selected-tab {
-	background-color: #202020;
-}
-
-.main-editor-tabs .btn-retro {
-	margin: 0 4px;
 }
 
 .main-editor-body {
@@ -66,8 +36,8 @@ html, body {
 }
 
 .context-view .action-menu-item span {
-	font-family: IBM_FONT_8_14, monospace !important;
-	font-size: 20px !important;
+	font-family: "IBM Plex Mono", monospace !important;
+	font-size: 16px !important;
 }
 
 /* Delete certain context menu items from Monaco editor */
