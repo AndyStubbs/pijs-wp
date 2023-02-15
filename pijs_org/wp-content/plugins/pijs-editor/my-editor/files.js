@@ -410,10 +410,10 @@ var g_file = ( function () {
 			} else {
 				if( isRecentChangesOnly ) {
 					if( item.isChanged ) {
-						clone.content = getFileContentById( item.id );
+						clone.content = btoa( getFileContentById( item.id ) );
 					}
 				} else {
-					clone.content = getFileContentById( item.id );
+					clone.content = btoa( getFileContentById( item.id ) );
 				}
 			}
 

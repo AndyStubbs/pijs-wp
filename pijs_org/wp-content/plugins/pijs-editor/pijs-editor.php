@@ -14,6 +14,9 @@ class Pijs_Editor {
 		add_shortcode( 'pijs_editor', array( $this, 'editor_shortcode' ) );
 		add_action('wp_ajax_playground_run_program', array( $this, 'playground_run_program' ) );
 		add_action('wp_ajax_nopriv_playground_run_program', array( $this, 'playground_run_program' ) );
+		add_action('wp_ajax_editor_run_program', array( $this, 'editor_run_program' ) );
+		add_action('wp_ajax_nopriv_editor_run_program', array( $this, 'editor_run_program' ) );
+		add_filter( 'upload_size_limit', 'pijs_ajax_upload_max_size', 10, 1 );
 	}
 
 	function playground_shortcode() {
@@ -122,6 +125,18 @@ class Pijs_Editor {
 		wp_enqueue_script( 'editor-editor' );
 	}
 
+	function pijs_ajax_upload_max_size( $size ) {
+		if (
+			isset( $_REQUEST[ 'action' ] ) && (
+				$_REQUEST[ 'action' ] == 'playground_run_program' ||
+				$_REQUEST[ 'action' ] == 'editor_run_program' 
+			)
+		) {
+			return 5 * 1024 * 1024; // 5 MB in bytes
+		}
+		return $size;
+	}
+
 	function playground_run_program() {
 		$response = array(
 			'success' => false,
@@ -164,6 +179,10 @@ class Pijs_Editor {
 			touch( $pathname );
 		}
 		file_put_contents( $filename, $template );
+	}
+
+	function editor_run_program() {
+
 	}
 
 	function uniqidReal( $length = 13 ) {

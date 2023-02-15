@@ -290,12 +290,12 @@ var g_main = ( function ( $ ) {
 		}
 		let settings = g_file.getProjectSettings();
 		let data = {
-			"action": "run",
+			"action": "editor_run_program",
 			"files": g_file.getFilesForUpload( getOnlyRecentChanges ),
 			"title": settings.name,
 			"has_project_run": m_hasProjectRun
 		};
-		$.post( "app.php", data, function ( dataReturn ) {
+		$.post( g_ajaxUrl, data, function ( dataReturn ) {
 			if( dataReturn.maxFileSizeExceeded ) {
 				g_layout.createPopup( "Error", "<p class='msg-error'>" +
 					"You are over the max storage capacity. " +
