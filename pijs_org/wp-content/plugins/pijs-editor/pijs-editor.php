@@ -8,6 +8,10 @@ Author: Andy Stubbs
 
 class Pijs_Editor {
 
+	private $scripts;
+	private $errors;
+	private $projectfiles;
+
 	function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
 		add_shortcode( 'pijs_playground', array( $this, 'playground_shortcode' ) );
@@ -153,8 +157,8 @@ class Pijs_Editor {
 		if( ! session_id() ) {
 			session_start();
 		}
-		if( !isset( $_SESSION[ 'project_id' ] ) ) {
-			$_SESSION[ 'project_id' ] = $this->uniqidReal( 6 );
+		if( !isset( $_SESSION[ 'playground_id' ] ) ) {
+			$_SESSION[ 'playground_id' ] = $this->uniqidReal( 6 );
 		}
 		$response[ 'project_id' ] = $_SESSION[ 'project_id' ];
 		$pijsFile = get_latest_version_url( 'pi-', '.js' );
@@ -182,7 +186,170 @@ class Pijs_Editor {
 	}
 
 	function editor_run_program() {
+		if( ! session_id() ) {
+			session_start();
+		}
+		if( !isset( $_SESSION[ 'project_id' ] ) ) {
+			$_SESSION[ 'project_id' ] = $this->uniqidReal( 6 );
+		}
+		$response = array(
+			'success' => true,
+			'project_id' => $_SESSION[ 'project_id' ],
+		);
+		$this->scripts = '';
+		$this->buildFiles( $_POST[ 'files' ], '' );
+		$this->build_template( htmlentities( $_POST[ 'title' ] ), $scripts );
+		wp_send_json( $response );
+	}
 
+	function buildFiles( $file, $path ) {
+		$parent_directory = dirname( ABSPATH );
+		$projectpath = $parent_directory . '/pijs-run.org/runs/' . $_SESSION[ 'project_id' ];
+		$name = preg_replace( '/[^a-zA-Z0-9_ \-\.]/', '', $file[ 'name' ] );
+		if( $file[ 'type' ] === "folder" ) {
+			if( $path . '/' . $name !== '/root' ) {
+				$newpath = $path . '/' . $name;
+				//echo 'Making dir: ' . $projectpath . $newpath . "-- \n";
+				if( !file_exists( $projectpath . $newpath ) ) {
+					mkdir( $projectpath . $newpath, 0777, true );
+				} else {
+					touch( $projectpath. $newpath );
+				}
+			} else {
+				//echo 'Skipping root dir: ' . $path . "-- \n";
+				$newpath = $path;
+			}
+			if( array_key_exists( 'content', $file ) ) {
+				foreach( $file[ 'content' ] as $subFile ) {
+					$this->buildFiles( $subFile, $newpath );
+				}
+			} else {
+				//logText( print_r( $file, true ) );
+			}
+		} else {
+			if( $file[ 'type' ] === 'javascript' ) {
+				if( $path !== '' ) {
+					$filename = $path . '/' . $name . '.js';	
+				} else {
+					$filename = $name . '.js';
+				}
+				$filepath = $projectpath . $path . '/' . $name. '.js';
+				if( substr( $filename, 0, 1 ) === '/' ) {
+					$filename = substr( $filename, 1 );
+				}
+				$this->scripts .= "\n\t\t" . '<script src="' . $filename . '"></script>';
+				if( array_key_exists( 'content', $file ) ) {
+					file_put_contents( $filepath, $file[ 'content' ] );	
+				} else {
+					touch( $filepath );
+				}
+			} elseif ( $file[ 'type' ] === 'image' ) {
+				$filepath = $projectpath . $path . '/' . $name;
+				if( array_key_exists( 'content', $file ) ) {
+					$this->convertToImage( $file[ 'content' ], $filepath );
+				} else {
+					touch( $filepath );
+				}
+			} elseif ( $file[ 'type' ] === 'audio' ) {
+				$filepath = $projectpath . $path . '/' . $name;
+				if( array_key_exists( 'content', $file ) ) {
+					$this->convertToAudio( $file[ 'content' ], $filepath );
+				} else {
+					touch( $filepath );
+				}
+			}
+		}
+	}
+
+	function convertToImage( $content, $filename ) {
+		$start = strpos( $content, 'data:' ) + 5;
+		$end = strpos( $content, ';', $start );
+		$imageType = substr( $content, $start, $end - $start );
+		$b64 = substr( $content, strpos( $content, 'base64,' ) + 7 );
+
+		//echo $filename;
+		//echo " -- \n";
+		//echo $imageType;
+		//echo " -- \n";
+		//echo $b64;
+
+		// Obtain the original content (usually binary data)
+		$bin = base64_decode( $b64 );
+
+		ob_start();
+
+		// Load GD resource from binary data
+		$im = imageCreateFromString( $bin );
+
+		ob_end_clean();
+
+		// Make sure that the GD library was able to load the image
+		// This is important, because you should not miss corrupted or unsupported images
+		if ( !$im ) {
+			return;
+		}
+		switch( $imageType ) {
+			case 'image/bmp':
+				imagebmp( $im, $filename . '.bmp' );
+				break;
+			case 'image/gif':
+				imagegif( $im, $filename . '.gif' );
+				break;
+			case 'image/jpeg':
+				imagejpg( $im, $filename . '.jpg' );
+				break;
+			case 'image/png':
+				imagepng( $im, $filename . '.png' );
+				break;
+			case 'image/webp':
+				imagewebp( $im, $filename . '.webp' );
+				break;
+			default: return false;
+		}
+	}
+
+	function convertToAudio( $content, $filename ) {
+		$start = strpos( $content, 'data:' ) + 5;
+		$end = strpos( $content, ';', $start );
+		$audioType = substr( $content, $start, $end - $start );
+		$b64 = substr( $content, strpos( $content, 'base64,' ) + 7 );
+
+		// Obtain the original content (usually binary data)
+		$bin = base64_decode( $b64 );
+
+		// Get the extension from audioType
+		switch( $audioType ) {
+			case 'audio/wave':
+				$filename .= '.wav';
+				break;
+			case 'audio/wav':
+				$filename .= '.wav';
+				break;
+			case 'audio/x-wav':
+				$filename .= '.wav';
+				break;
+			case 'audio/x-pn-wav':
+				$filename .= '.wav';
+				break;
+			case 'audio/webm':
+				$filename .= '.webm';
+				break;
+			case 'audio/ogg':
+				$filename .= '.ogg';
+				break;
+			case 'audio/mpeg':
+				$filename .= '.mp3';
+				break;
+			case 'audio/mid':
+				$filename .= '.mid';
+				break;
+			case 'audio/mp4':
+				$filename .= '.mp4';
+				break;
+			default:
+				return;
+		}
+		file_put_contents( $filename, $bin );
 	}
 
 	function uniqidReal( $length = 13 ) {
