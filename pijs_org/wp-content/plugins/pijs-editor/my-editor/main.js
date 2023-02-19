@@ -55,7 +55,6 @@ var g_main = ( function ( $ ) {
 		"File": []
 	};
 	let m_tabsElement = null;
-	let m_hasProjectRun = false;
 	let m_zipFileUploads = null;
 	let m_fileUploads = null;
 	let m_models = {};
@@ -293,7 +292,7 @@ var g_main = ( function ( $ ) {
 			"action": "editor_run_program",
 			"files": g_file.getFilesForUpload( getOnlyRecentChanges ),
 			"title": settings.name,
-			"has_project_run": m_hasProjectRun
+			"isFullProject": !getOnlyRecentChanges
 		};
 		$.post( g_ajaxUrl, data, function ( dataReturn ) {
 			if( dataReturn.maxFileSizeExceeded ) {
@@ -306,10 +305,14 @@ var g_main = ( function ( $ ) {
 				runProgram( noRun, false );
 				return;
 			}
-			m_hasProjectRun = true;
-			g_file.resetFilesChanged();
-			let url = dataReturn.url;
-			if( !noRun && url ) {
+			if( !noRun && dataReturn.success ) {
+				let href = window.location.href;
+				let base_url = "http://localhost/pijs-run.org/";
+				if( href.indexOf( "localhost" ) === -1 ) {
+					base_url = "https://www.pijs-run.org/";
+				}
+				let url = base_url + "runs/" + dataReturn.project_id;
+				g_file.resetFilesChanged();
 				let w = null;
 				if( settings.isFullscreen ) {
 					w = window.open( url, "_blank" );

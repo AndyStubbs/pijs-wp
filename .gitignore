@@ -15,3 +15,5 @@ node_modules/
 *.log
 *.sql
 *.sqlite
+
+pijs-run.org/runs/*
