@@ -20,7 +20,7 @@ class Pijs_Editor {
 		add_action('wp_ajax_nopriv_playground_run_program', array( $this, 'playground_run_program' ) );
 		add_action('wp_ajax_editor_run_program', array( $this, 'editor_run_program' ) );
 		add_action('wp_ajax_nopriv_editor_run_program', array( $this, 'editor_run_program' ) );
-		add_filter( 'upload_size_limit', 'pijs_ajax_upload_max_size', 10, 1 );
+		add_filter( 'upload_size_limit', array( $this, 'pijs_ajax_upload_max_size' ), 10, 1 );
 	}
 
 	function playground_shortcode() {
