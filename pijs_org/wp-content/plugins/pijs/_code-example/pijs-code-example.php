@@ -1,10 +1,4 @@
 <?php
-/*
-Plugin Name: Pijs Code Example
-Description: A plugin that creates a runnable example on the page.
-Version: 1.0
-Author: Andy Stubbs
-*/
 
 class Pijs_Code_Example {
 	private $example_shortcode_name = 'pijs_code_example';
@@ -22,21 +16,24 @@ class Pijs_Code_Example {
 	}
 
 	function register_scripts() {
-		if ( is_page() && has_shortcode( get_post()->post_content, $this->example_shortcode_name ) ) {
-			return $this->register_shortcode_scripts();
+		if( is_page() ) {
+			$content = get_post()->post_content;
+			if( has_shortcode( $content, $this->example_shortcode_name ) ) {
+				$this->register_common_scripts();
+				return $this->register_example_shortcode_scripts();
+			}
 		}
 	}
 
-	function register_shortcode_scripts() {
-		//error_log( "register_scripts function called\n", 3, WP_CONTENT_DIR . '/debug.log' );
+	function register_common_scripts() {
 		wp_register_style(
-			'highlight-styles', plugins_url( 'highlights/styles/sunburst.css', __FILE__ )
+			'highlight-styles', plugins_url( '../libs/highlights/styles/sunburst.css', __FILE__ )
 		);
 		wp_register_style(
 			'example-styles', plugins_url( 'example-styles.css', __FILE__ )
 		);
 		wp_register_script(
-			'highlight-pack', plugins_url( 'highlights/highlight.pack.js', __FILE__ )
+			'highlight-pack', plugins_url( '../libs/highlights/highlight.pack.js', __FILE__ )
 		);
 		wp_register_script(
 			'apply-highlights', plugins_url( 'apply-highlights.js', __FILE__ ), null, '1.0', true
@@ -44,10 +41,13 @@ class Pijs_Code_Example {
 		wp_register_script(
 			'examples', plugins_url( 'examples.js', __FILE__ ), null, '1.0', true
 		);
+	}
 
+	function register_example_shortcode_scripts() {
+		//error_log( "register_scripts function called\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		wp_enqueue_style( 'highlight-styles' );
 		wp_enqueue_style( 'example-styles' );
-		wp_enqueue_script( 'pijs', get_latest_version_url( 'pi-', '.js' ) );
+		wp_enqueue_script( 'pijs', pijs_get_latest_version_url( 'pi-', '.js' ) );
 		wp_enqueue_script( 'highlight-pack' );
 		wp_enqueue_script( 'apply-highlights' );
 		wp_enqueue_script( 'examples' );
@@ -96,6 +96,7 @@ class Pijs_Code_Example {
 	}
 
 	function pijs_code_example_shortcode( $atts, $content = null ) {
+		error_log( "pijs_code_example_shortcode function called\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		$atts = shortcode_atts( array(
 			'lang' => 'javascript',
 			'no_run' => false,
@@ -108,23 +109,41 @@ class Pijs_Code_Example {
 		$content = html_entity_decode( $content, ENT_QUOTES, 'UTF-8' );
 		$content = trim( $content );
 		$this->findNonAsciiChars( $content );
+		if( $atts[ 'lang' ] == 'html' ) {
+			$content = htmlentities( $content );
+		}
 		$id = "id='example-code-$this->examples'";
 		$final = "<pre><code $id class='language-{$atts[ 'lang' ]}'>$content</code></pre>";
-		if( !$atts[ 'no_run' ] ) {
+		$btnClass = 'class="btn-retro btn-red btn-8-14"';
+		error_log( print_r( $atts, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		if( !$atts[ 'no_run' ] && $atts[ 'lang' ] == 'javascript' ) {
 			$this->addExampleCode( $content, $atts[ 'on_close' ] );
-			$btnClass = 'class="btn-retro btn-red btn-8-14"';
 			$final .= "<input type='button' $btnClass value='Run' onclick='runExample( $this->examples );'>";
-			$final .= "<input type='button' $btnClass value='Copy' onclick='copyExample( $this->examples );'>";
 			if( $this->isFirst ) {
 				$this->isFirst = false;
 			}
-			$this->examples += 1;
 		}
+		$this->examples += 1;
+		$final .= "<input type='button' $btnClass value='Copy' onclick='copyExample( $this->examples );'>";
 		//error_log( "$content\n", 3, WP_CONTENT_DIR . '/debug.log' );
+
+		error_log( "$final\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		return $final;
 	}
 
-	function findNonAsciiChars($input_string) {
+	function pijs_help_page_shortcode() {
+		$content = file_get_contents( plugin_dir_path( __FILE__ ) . 'pijs-help.php' );
+		$content .= $this->get_link_scripts();
+		return $content;
+	}
+
+	function get_link_scripts() {
+		return "<script>" .
+			"var g_helpFile = '" .  plugins_url( 'help.json', __FILE__ ) . "';" .
+		"</script>";
+	}
+
+	function findNonAsciiChars( $input_string ) {
 		$non_ascii_chars = array();
 		$msg = '';
 		for( $i = 0; $i < strlen( $input_string ); $i++ ) {
@@ -179,4 +198,3 @@ class Pijs_Code_Example {
 	}
 }
 
-new Pijs_Code_Example();

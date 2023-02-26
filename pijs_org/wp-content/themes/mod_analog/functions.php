@@ -453,7 +453,7 @@ function display_blank_page( $template ) {
 }
 add_filter( 'template_include', 'display_blank_page' );
 
-function get_latest_version_url( $fileStart, $fileEnd ) {
+function pijs_get_latest_version_url( $fileStart, $fileEnd ) {
 	$directory = ABSPATH . 'files';
 	//error_log( "$directory\n", 3, WP_CONTENT_DIR . '/debug.log' );
 	$latestFile = '';
@@ -467,7 +467,7 @@ function get_latest_version_url( $fileStart, $fileEnd ) {
 			$temp = substr( $temp, 0, strpos( $temp, $fileEnd ) );
 			//error_log(  "Trim end: $temp\n", 3, WP_CONTENT_DIR . '/debug.log' );
 			$parts = explode( ".", $temp );
-			if( !isValidVersion( $parts ) ) {
+			if( !pijs_is_valid_version( $parts ) ) {
 				//error_log(  "Not a valid version #\n", 3, WP_CONTENT_DIR . '/debug.log' );
 				continue;
 			}
@@ -485,16 +485,14 @@ function get_latest_version_url( $fileStart, $fileEnd ) {
 	return $fullPath;
 }
 
-function isValidVersion( $parts ) {
+function pijs_is_valid_version( $parts ) {
 	if( count( $parts ) !== 3 ) {
 		return false;
 	}
-
 	foreach( $parts as $part ) {
 		if( !is_numeric( $part ) ) {
 			return false;
 		}
 	}
-
 	return true;
 }

@@ -59,6 +59,7 @@ var g_main = ( function ( $ ) {
 	let m_fileUploads = null;
 	let m_models = {};
 	let m_clickedOnRootFolder = null;
+	let m_reRuns = 0;
 
 	return {
 		"init": init,
@@ -301,10 +302,12 @@ var g_main = ( function ( $ ) {
 					"You cannot run or update your program until you free up some file space.</p>" );
 				return;
 			}
-			if( dataReturn.needsRefresh ) {
+			if( dataReturn.needsRefresh && m_reRuns === 0 ) {
+				m_reRuns += 1;
 				runProgram( noRun, false );
 				return;
 			}
+			m_reRuns = 0;
 			if( !noRun && dataReturn.success ) {
 				let href = window.location.href;
 				let base_url = "http://localhost/pijs-run.org/";
