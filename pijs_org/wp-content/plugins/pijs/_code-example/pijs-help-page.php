@@ -1,10 +1,7 @@
-<section id="menu">
-	<div><a href="#header">Commands</a></div>
-</section>
 <div class="commands-page page">
-	<section id="header">
-		<h1>Pi.js</h1>
-		<div>Graphics, Sound, and Input Library</div>
+	<section id="index">
+		<div id="index-list"></div>
+		<div id="contents"></div>
 	</section>
 	<section id="allCommands"></section>
 </div>

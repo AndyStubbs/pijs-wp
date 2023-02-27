@@ -1,14 +1,42 @@
 const OPEN_FOLDER_ENTITY = "▼";
 const CLOSED_FOLDER_ENTITY = "▲";
 var mustBuildCommands  = false;
+var g_fontSize = 18;
 
-function printIndex() {
+function printIndex( commands ) {
+	var i, strContents, strLetter, isDivOpen, strIndex, name;
+	strIndex = "";
+	strContents = "<div>";
+	strLetter = "";
+	isDivOpen = false;
+	for( i = 0; i < commands.length; i++ ) {
+		name = commands[ i ].name;
+		if( name.charAt( 0 ).toUpperCase() !== strLetter ) {
+			strLetter = name.charAt( 0 ).toUpperCase();
+			strIndex += "* <a href='#letter_" + strLetter + "'>" + strLetter + "</a> ";
+			if( isDivOpen ) {
+				strContents += "</div>";
+			}
+			strContents += printBorderLine( strLetter ) + "<div class='contents-letter'>";
+			isDivOpen = true;
+		}
+		strContents += "<span class='wide-span'><a href='#command_" + name + "'>" + name + "</a></span>";
+	}
+	if( isDivOpen ) {
+		strContents += "</div>";
+	}
+	strContents += "</div>";
+	document.getElementById( "index-list" ).innerHTML = strIndex;
+	document.getElementById( "contents" ).innerHTML = strContents;
+}
+
+function printIndex2( commands ) {
 	var i, ul, li;
 
 	ul = document.createElement( "ul" );
 	for( i = 0; i < commands.length; i++ ) {
 		li = document.createElement( "li" );
-		li.innerHTML = "<a href='docs/api/#command_" + commands[ i ].name + "'>" + commands[ i ].name + "</a>";
+		li.innerHTML = "<a href='#command_" + commands[ i ].name + "'>" + commands[ i ].name + "</a>";
 		ul.appendChild( li );
 	}
 	document.getElementById( "menu" ).appendChild( ul );
@@ -17,7 +45,7 @@ function printIndex() {
 	document.getElementById( "menu" ).appendChild( div );
 }
 
-function printCommands() {
+function printCommands( commands ) {
 	var msg, i, j, msgParam, name;
 	msg = "<h1>Commands</h1>";
 	for( i = 0; i < commands.length; i++ ) {
@@ -74,7 +102,7 @@ function printCommands() {
 			msg += "<div class='sectionTitle'>See Also:</div>";
 			msg += "<div class='tabbed'>";
 			for( j = 0; j < commands[ i ].seeAlso.length; j++ ) {
-				msg += "* <a href='docs/api/#command_" + commands[ i ].seeAlso[ j ] + "'>" +
+				msg += "* <a href='#command_" + commands[ i ].seeAlso[ j ] + "'>" +
 					commands[ i ].seeAlso[ j ] + "</a> ";
 			}
 			msg += "</div>";
@@ -110,7 +138,7 @@ function printBorderItem( label ) {
 function printBorderLine( label ) {
 	var width, count, msg, msg1, msg2, msg3, i;
 	width = document.querySelector( ".commands-page" ).getBoundingClientRect().width - 75;
-	count = Math.floor( width / 16 ) - 5 - label.length * 2;
+	count = Math.floor( width / g_fontSize ) + 15 - label.length * 2;
 	msg = "<div class='border' id='letter_" + label + "'>";
 	msg1 = "&#x2554;";
 	msg3 = "&#x255A;";
@@ -141,11 +169,9 @@ function printBorderLine( label ) {
 
 ( function( $ ) {
 
-	$.getJSON( "help.json" ).done( function () {
-		$( document ).ready( function () {
-			printIndex();
-			printCommands();
-		} );
+	$.getJSON( g_helpFile ).done( function ( commands ) {
+		printIndex( commands );
+		printCommands( commands );
 	} );
 
 	var resizeTimeout;

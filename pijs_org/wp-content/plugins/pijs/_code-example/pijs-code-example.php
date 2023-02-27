@@ -2,6 +2,7 @@
 
 class Pijs_Code_Example {
 	private $example_shortcode_name = 'pijs_code_example';
+	private $help_page_shortcode_name = 'pijs_help_page';
 	private $isFirst = true;
 	private $exampleCode = "var examples = [];\n";
 	private $examples = 0;
@@ -10,6 +11,7 @@ class Pijs_Code_Example {
 		//error_log( "Pijs_Code_Example constructor called\n", 3, WP_CONTENT_DIR . '/debug.log' );
 
 		add_shortcode( $this->example_shortcode_name, array( $this, 'pijs_code_example_shortcode' ) );
+		add_shortcode( $this->help_page_shortcode_name, array( $this, 'pijs_help_page_shortcode' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
 		add_action( 'wp_footer', array( $this, 'pijs_code_example_footer' ) );
 		add_filter( 'content_save_pre', array( $this, 'process_shortcode_content' ) );
@@ -21,6 +23,10 @@ class Pijs_Code_Example {
 			if( has_shortcode( $content, $this->example_shortcode_name ) ) {
 				$this->register_common_scripts();
 				return $this->register_example_shortcode_scripts();
+			}
+			if( has_shortcode( $content, $this->help_page_shortcode_name ) ) {
+				$this->register_common_scripts();
+				return $this->register_help_shortcode_scripts();
 			}
 		}
 	}
@@ -51,6 +57,24 @@ class Pijs_Code_Example {
 		wp_enqueue_script( 'highlight-pack' );
 		wp_enqueue_script( 'apply-highlights' );
 		wp_enqueue_script( 'examples' );
+	}
+
+	function register_help_shortcode_scripts() {
+		wp_register_style(
+			'help-styles', plugins_url( 'help-styles.css', __FILE__ )
+		);
+		wp_register_script(
+			'pijs_help', plugins_url( 'help.js', __FILE__ ), null, '1.0', true
+		);
+
+		wp_enqueue_style( 'highlight-styles' );
+		wp_enqueue_style( 'example-styles' );
+		wp_enqueue_style( 'help-styles' );
+		wp_enqueue_script( 'pijs', pijs_get_latest_version_url( 'pi-', '.js' ) );
+		wp_enqueue_script( 'highlight-pack' );
+		wp_enqueue_script( 'apply-highlights' );
+		wp_enqueue_script( 'examples' );
+		wp_enqueue_script( 'pijs_help' );
 	}
 
 	function process_shortcode_content( $content ) {
@@ -132,14 +156,14 @@ class Pijs_Code_Example {
 	}
 
 	function pijs_help_page_shortcode() {
-		$content = file_get_contents( plugin_dir_path( __FILE__ ) . 'pijs-help.php' );
+		$content = file_get_contents( plugin_dir_path( __FILE__ ) . 'pijs-help-page.php' );
 		$content .= $this->get_link_scripts();
 		return $content;
 	}
 
 	function get_link_scripts() {
 		return "<script>" .
-			"var g_helpFile = '" .  plugins_url( 'help.json', __FILE__ ) . "';" .
+			"var g_helpFile = '" . pijs_get_latest_version_url( 'pi-help-', '.json' ) . "';" .
 		"</script>";
 	}
 

@@ -59,7 +59,7 @@ class Pijs_Docs {
 
 	function get_link_scripts() {
 		return "<script>" .
-			"var g_helpFile = '" .  plugins_url( '_docs/help.json', __FILE__ ) . "';" .
+			"var g_helpFile = '" . pijs_get_latest_version_url( 'pi-help', '.json' ) . "';" .
 		"</script>";
 	}
 }
