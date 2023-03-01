@@ -93,7 +93,7 @@ function printCommands( commands ) {
 		if( commands[ i ].returns ) {
 			msg += "<div>&nbsp;</div>";
 			msg += "<div class='sectionTitle'>Return Data:</div>";
-			msg += "<div class='tabbed'>" + commands[ i ].returns + "</div>";			
+			msg += "<div class='tabbed'>" + commands[ i ].returns + "</div>"
 		}
 		
 		// See also
@@ -112,8 +112,9 @@ function printCommands( commands ) {
 		msg += "<div class='sectionTitle'>Example:</div>";
 		msg += "<div class='example'><pre><code class='lang-javascript'>" + commands[ i ].example + "</pre></code></div>";
 		msg += "<div class='tabbed'>";
-		msg += "<input type='button' class='btn-retro btn-red btn-8-14 btn-large' value='Run' onclick='RunExample(" + i + ")' />";
-		msg += "<input type='button' class='btn-retro btn-red btn-8-14 btn-large' value='Copy' onclick='CopyExample(" + i +")' />";
+		msg += "<input type='button' class='btn-retro btn-red' value='Run' onclick='runExample(\"" + commands[ i ].name + "\")' />";
+		msg += "<input type='button' class='btn-retro btn-red' value='Copy' onclick='copyExample(" + i +")' />";
+		msg += "<p><a href='#main'>Top</a></p>";
 		msg += "</div>";
 		msg += "</section>";
 	}
@@ -137,8 +138,12 @@ function printBorderItem( label ) {
 
 function printBorderLine( label ) {
 	var width, count, msg, msg1, msg2, msg3, i;
-	width = document.querySelector( ".commands-page" ).getBoundingClientRect().width - 75;
-	count = Math.floor( width / g_fontSize ) + 15 - label.length * 2;
+	width = document.querySelector( ".commands-page" ).getBoundingClientRect().width + 300;
+	count = Math.floor( width / g_fontSize ) - label.length * 2;
+	if( width <= 1000 ) {
+		count += label.length * 2;
+	}
+
 	msg = "<div class='border' id='letter_" + label + "'>";
 	msg1 = "&#x2554;";
 	msg3 = "&#x255A;";
@@ -154,15 +159,18 @@ function printBorderLine( label ) {
 		msg2 += "&#x2550;";
 		msg3 += " ";
 	}
-	msg1 += "&#x2554;";
-	msg3 += "&#x255A;";
-	for( i = 0; i < label.length + 2; i++ ) {
-		msg1 += "&#x2550;";
-		msg3 += "&#x2550;";
+
+	if( width > 1000 ) {
+		msg1 += "&#x2554;";
+		msg3 += "&#x255A;";
+		for( i = 0; i < label.length + 2; i++ ) {
+			msg1 += "&#x2550;";
+			msg3 += "&#x2550;";
+		}
+		msg1 += "&#x2557;";
+		msg2 += "&#x2563; " + label + " &#x2551;";
+		msg3 += "&#x255D;";
 	}
-	msg1 += "&#x2557;";
-	msg2 += "&#x2563; " + label + " &#x2551;";
-	msg3 += "&#x255D;";
 	msg += "\n" + msg1 + "\n" + msg2 + "\n" + msg3 + "\n</div>";
 	return msg;
 }
@@ -172,6 +180,9 @@ function printBorderLine( label ) {
 	$.getJSON( g_helpFile ).done( function ( commands ) {
 		printIndex( commands );
 		printCommands( commands );
+		document.querySelectorAll( "pre code" ).forEach( ( block ) => {
+			hljs.highlightBlock( block );
+		} );
 	} );
 
 	var resizeTimeout;

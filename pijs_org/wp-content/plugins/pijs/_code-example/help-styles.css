@@ -76,7 +76,7 @@ li {
 }
 section {
 	margin: 0;
-	padding: 30px 0;
+	padding: 0;
 }
 .sectionTitle {
 	padding-left: 16px;
@@ -138,6 +138,34 @@ canvas {
 }
 .gray {
 	color: #ACACAC;
+}
+
+@media screen and (max-width: 1340px) {
+	#primary #main {
+		width: 80%;
+	}
+}
+
+@media screen and (max-width: 1048px) {
+	#primary #main {
+		width: 100%;
+	}
+}
+
+@media screen and (max-width: 768px) {
+	.tabbed {
+		padding-left: 24px;
+	}
+	table.tabbed {
+		margin-left: 24px;
+	}
+	#primary #main {
+		margin: 5px;
+		width: 100%;
+	}
+	#main article.post, #main article.page, #main .post-navigation {
+		padding: 0;
+	}
 }
 
 /*

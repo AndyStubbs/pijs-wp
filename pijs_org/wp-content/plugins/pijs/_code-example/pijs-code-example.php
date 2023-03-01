@@ -70,9 +70,9 @@ class Pijs_Code_Example {
 		wp_enqueue_style( 'highlight-styles' );
 		wp_enqueue_style( 'example-styles' );
 		wp_enqueue_style( 'help-styles' );
+		wp_enqueue_script( 'pi-examples', pijs_get_latest_version_url( 'pi-examples-', '.js' ) );
 		wp_enqueue_script( 'pijs', pijs_get_latest_version_url( 'pi-', '.js' ) );
 		wp_enqueue_script( 'highlight-pack' );
-		wp_enqueue_script( 'apply-highlights' );
 		wp_enqueue_script( 'examples' );
 		wp_enqueue_script( 'pijs_help' );
 	}
