@@ -195,8 +195,8 @@ class Pijs_Editor {
 		$parent_directory = dirname( ABSPATH );
 		$pathname = $parent_directory . '/pijs-run.org/runs/' . $projectId;
 		$filename = $pathname . '/index.php';
-		error_log( "$template\n", 3, WP_CONTENT_DIR . '/debug.log' );
-		error_log( "$filename\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		//error_log( "$template\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		//error_log( "$filename\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		if( ! file_exists( $pathname ) ) {
 			mkdir( $pathname, 0777, true );
 		} else {
@@ -230,6 +230,7 @@ class Pijs_Editor {
 		$isFullProject = filter_var( $_POST[ 'isFullProject' ], FILTER_VALIDATE_BOOLEAN );
 		$doesProjectExist = file_exists( $this->getProjectPath() );
 
+		/*
 		if( !$isFullProject ) {
 			error_log( 'IS NOT FULL PROJECT' . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		}
@@ -239,12 +240,13 @@ class Pijs_Editor {
 		if( $isNewSession ) {
 			error_log( 'IS A NEW SESSION' . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		}
+		*/
 
 		if(
 			!$isFullProject &&
 			( !$doesProjectExist || $isNewSession )
 		) {
-			error_log( 'NEEDS REFRESH' . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+			//error_log( 'NEEDS REFRESH' . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 			$response[ 'needsRefresh' ] = true;
 			$response[ 'success' ] = false;
 			wp_send_json( $response );
@@ -263,11 +265,11 @@ class Pijs_Editor {
 	}
 
 	function buildFiles( $file, $path ) {
-		error_log( 'Build File: ' . $file[ 'name' ] . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		//error_log( 'Build File: ' . $file[ 'name' ] . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		$projectpath = $this->getProjectPath();
 		$name = preg_replace( '/[^a-zA-Z0-9_ \-\.]/', '', $file[ 'name' ] );
 		if( $file[ 'type' ] === 'folder' ) {
-			error_log( "FILE IS FOLDER\n", 3, WP_CONTENT_DIR . '/debug.log' );
+			//error_log( "FILE IS FOLDER\n", 3, WP_CONTENT_DIR . '/debug.log' );
 			if( $path . '/' . $name !== '/root' ) {
 				$newpath = $path . '/' . $name;
 				//echo 'Making dir: ' . $projectpath . $newpath . "-- \n";
@@ -323,8 +325,8 @@ class Pijs_Editor {
 	}
 
 	function convertToImage( $content, $filename ) {
-		error_log( "Convert to Image: $filename\n", 3, WP_CONTENT_DIR . '/debug.log' );
-		error_log( "**********************\n\n$content\n\n*********************\n\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		//error_log( "Convert to Image: $filename\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		//error_log( "**********************\n\n$content\n\n*********************\n\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		$start = strpos( $content, 'data:' ) + 5;
 		$end = strpos( $content, ';', $start );
 		$imageType = substr( $content, $start, $end - $start );

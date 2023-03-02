@@ -211,9 +211,9 @@ function pijs_save_custom_articles( $post_id ) {
 		$values = array();
 		foreach( $rawValues as $value ) {
 			if( strlen( $value ) > 0 ) {
-				error_log( "Value: $value" );
+				//error_log( "Value: $value" );
 				$content = wp_kses_post( $value );
-				error_log( "Content: $content" );
+				//error_log( "Content: $content" );
 				$values[] = $content;
 			}
 		}

@@ -81,10 +81,10 @@ class Pijs_Code_Example {
 		$shortcode = $this->example_shortcode_name;
 		$start_pos = 0;
 		while( $start_pos < strlen( $content ) ) {
-			error_log( $start_pos . "\n\n", 3, WP_CONTENT_DIR . '/debug.log' );
+			//error_log( $start_pos . "\n\n", 3, WP_CONTENT_DIR . '/debug.log' );
 			$shortcode_tag_start_pos = strpos( $content, '[' . $shortcode, $start_pos );
 			if( $shortcode_tag_start_pos === false ) {
-				error_log( '[' . $shortcode . ' ' . "Shortcode not found\n\n", 3, WP_CONTENT_DIR . '/debug.log' );
+				//error_log( '[' . $shortcode . ' ' . "Shortcode not found\n\n", 3, WP_CONTENT_DIR . '/debug.log' );
 				//$input_string .= substr( $input_string, $start_pos );
 				break;
 			} else {
@@ -106,9 +106,9 @@ class Pijs_Code_Example {
 				$content_end = substr( $content, $shortcode_content_end );
 				$content = $content_beg . $shortcode_content . $content_end;
 
-				error_log( "BEGINNING\n" . $content_beg . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
-				error_log( "MIDDLE\n" . $shortcode_content . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
-				error_log( "END\n" . $content_end . "\n\n\n", 3, WP_CONTENT_DIR . '/debug.log' );
+				//error_log( "BEGINNING\n" . $content_beg . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+				//error_log( "MIDDLE\n" . $shortcode_content . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+				//error_log( "END\n" . $content_end . "\n\n\n", 3, WP_CONTENT_DIR . '/debug.log' );
 			}
 
 			$start_pos = strpos( $content, '[/' . $shortcode, $shortcode_tag_start_pos );
@@ -181,7 +181,7 @@ class Pijs_Code_Example {
 			}
 		}
 		if( count( $non_ascii_chars ) > 0 ) {
-			error_log( print_r( $non_ascii_chars, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+			//error_log( print_r( $non_ascii_chars, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 			//error_log( $msg . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		}
 		//return $non_ascii_chars;
