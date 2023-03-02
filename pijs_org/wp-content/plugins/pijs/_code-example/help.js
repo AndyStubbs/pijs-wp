@@ -110,10 +110,11 @@ function printCommands( commands ) {
 		
 		msg += "<div>&nbsp;</div>";
 		msg += "<div class='sectionTitle'>Example:</div>";
-		msg += "<div class='example'><pre><code class='lang-javascript'>" + commands[ i ].example + "</pre></code></div>";
+		msg += "<div class='example'><pre><code class='lang-javascript' id='example-code-" + i + "'>" + commands[ i ].example + "</pre></code></div>";
 		msg += "<div class='tabbed'>";
 		msg += "<input type='button' class='btn-retro btn-red' value='Run' onclick='runExample(\"" + commands[ i ].name + "\")' />";
 		msg += "<input type='button' class='btn-retro btn-red' value='Copy' onclick='copyExample(" + i +")' />";
+		msg += "<input type='button' class='btn-retro btn-red' value='Playground' onclick='gotoPlayground(" + i +")' />";
 		msg += "<p><a href='#main'>Top</a></p>";
 		msg += "</div>";
 		msg += "</section>";

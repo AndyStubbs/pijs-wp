@@ -23,8 +23,23 @@ class Pijs_Editor {
 		add_filter( 'upload_size_limit', array( $this, 'pijs_ajax_upload_max_size' ), 10, 1 );
 	}
 
+	function isSameSite() {
+		$referer = $_SERVER[ 'HTTP_REFERER' ];
+		$site_url = get_site_url();
+		return strpos( $referer, $site_url ) === 0;
+	}
+
 	function playground_shortcode() {
-		$content = file_get_contents( plugin_dir_path( __FILE__ ) . '/playground-body.php' );
+		//error_log( 'CODE: ' . print_r( $_POST, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		
+		$content = '';
+		if( $this->isSameSite() && isset( $_POST[ 'code' ] ) ) {
+			$code = $_POST[ 'code' ];
+			$content .= "<script>g_playgroundCode = '$code';</script>";
+		} else {
+			$content .= "<script>g_playgroundCode = false;</script>";
+		}
+		$content .= file_get_contents( plugin_dir_path( __FILE__ ) . '/playground-body.php' );
 		$content .= $this->get_link_scripts();
 		return $content;
 	}
@@ -146,6 +161,10 @@ class Pijs_Editor {
 			'success' => false,
 			'project_id' => '',
 		);
+		if( !$this->isSameSite() ) {
+			wp_send_json( $response );
+			return;
+		}
 		$code = '';
 		//error_log( 'Post: ' . print_r( $_POST[ 'code' ], true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		if( !empty( $_POST[ 'code' ] ) ) {
@@ -187,6 +206,14 @@ class Pijs_Editor {
 	}
 
 	function editor_run_program() {
+		if( !$this->isSameSite() ) {
+			$response = array(
+				'success' => false,
+				'project_id' => '',
+			);
+			wp_send_json( $response );
+			return;
+		}
 		if( ! session_id() ) {
 			session_start();
 		}

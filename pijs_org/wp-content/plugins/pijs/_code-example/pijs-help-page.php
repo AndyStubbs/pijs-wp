@@ -7,6 +7,6 @@
 </div>
 <div id="exampleBox" style="display: none;">
 	<div id="canvasContainer"></div>
-	<input type="button" class="btn-retro btn-red" value="Close" onclick="closeExample()" style="position: absolute;left:36px;" />
+	<input type="button" class="btn-retro btn-red btn-8-14 btn-large" value="Close" onclick="closeExample()" style="position: absolute;left:36px;top:18px;" />
 	<input type="button" class="btn-retro" id="clearFocus" value="" style="line-height: 0px;height:0px;box-shadow: none;background-color: rgba(0,0,0,0);" />
 </div>

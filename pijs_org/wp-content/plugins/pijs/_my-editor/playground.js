@@ -9,10 +9,14 @@ require.config( { paths: {
 
 require( [ "vs/editor/editor.main" ], function () {
 	setTimeout( function () {
+		let code = "$.screen(\"300x200\");\n$.print(\"Hello World\");";
+		if( g_playgroundCode ) {
+			code = atob( g_playgroundCode );
+		}
 		g_editor.init();
 		g_editor.createEditor( document.querySelector( ".main-editor-body" ) )
 		g_editor.setModel( 
-			g_editor.createModel( "$.screen(\"300x200\");\n$.print(\"Hello World\");", "javascript" )
+			g_editor.createModel( code, "javascript" )
 		);
 	} );
 } );

@@ -120,7 +120,7 @@ class Pijs_Code_Example {
 	}
 
 	function pijs_code_example_shortcode( $atts, $content = null ) {
-		error_log( "pijs_code_example_shortcode function called\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		//error_log( "pijs_code_example_shortcode function called\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		$atts = shortcode_atts( array(
 			'lang' => 'javascript',
 			'no_run' => false,
@@ -139,7 +139,7 @@ class Pijs_Code_Example {
 		$id = "id='example-code-$this->examples'";
 		$final = "<pre><code $id class='language-{$atts[ 'lang' ]}'>$content</code></pre>";
 		$btnClass = 'class="btn-retro btn-red btn-8-14"';
-		error_log( print_r( $atts, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		//error_log( print_r( $atts, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		if( !$atts[ 'no_run' ] && $atts[ 'lang' ] == 'javascript' ) {
 			$this->addExampleCode( $content, $atts[ 'on_close' ] );
 			$final .= "<input type='button' $btnClass value='Run' onclick='runExample( $this->examples );'>";
@@ -147,11 +147,12 @@ class Pijs_Code_Example {
 				$this->isFirst = false;
 			}
 		}
-		$this->examples += 1;
 		$final .= "<input type='button' $btnClass value='Copy' onclick='copyExample( $this->examples );'>";
+		$final .= "<input type='button' $btnClass value='Playground' onclick='gotoPlayground( $this->examples );'>";
+		$this->examples += 1;
 		//error_log( "$content\n", 3, WP_CONTENT_DIR . '/debug.log' );
 
-		error_log( "$final\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		//error_log( "$final\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		return $final;
 	}
 
@@ -164,6 +165,7 @@ class Pijs_Code_Example {
 	function get_link_scripts() {
 		return "<script>" .
 			"var g_helpFile = '" . pijs_get_latest_version_url( 'pi-help-', '.json' ) . "';" .
+			"var g_playgroundLink = '" . get_site_url() . "/apps/playground';" .
 		"</script>";
 	}
 
@@ -219,6 +221,9 @@ class Pijs_Code_Example {
 				"<input type='button' $btnClass id='clearFocus' value='' />\n" .
 			"</div>\n";
 		echo "<script>\n$this->exampleCode\n</script>";
+		echo "<script>\n" .
+				"var g_playgroundLink = '" . get_site_url() . "/apps/playground';" .
+			"\n</script>";
 	}
 }
 

@@ -1,7 +1,5 @@
 <div class="main-menu">
 	<button id="btn-run">Run &#9658;</button>
-	<button id="btn-help" class="menu-closed">Show Help</button>
-	<button id="btn-options">Options</button>
 </div>
 <div class="help-menu" style="display: none">Help is on it's way.</div>
 <div class="vertical-resize-bar" style="display: none;">
