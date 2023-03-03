@@ -9,7 +9,7 @@
 * @preserve
 */
 
-window.pi = ( function () {
+window.piExtra = ( function () {
 	"use strict";
 
 	var m_piData, m_api, m_waiting, m_waitCount, m_readyList, m_commandList, m_startReadyListTimeout;

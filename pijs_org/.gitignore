@@ -32,6 +32,7 @@ wp-config.php
 /wp-content/plugins/wordpress-importer
 /wp-content/plugins/*.php
 /wp-content/plugins/*.zip
+/wp-content/plugins/advanced-database-cleaner
 
 # Uploads
 /wp-content/uploads/

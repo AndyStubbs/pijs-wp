@@ -46,7 +46,7 @@ var g_editor = ( function () {
 			}
 		} );
 
-		monaco.languages.typescript.javascriptDefaults.addExtraLib( pi.getMap(), "filename/fields.d.ts" );
+		monaco.languages.typescript.javascriptDefaults.addExtraLib( piExtra.getMap(), "filename/fields.d.ts" );
 	}
 
 	function createEditor( containerElement ) {
