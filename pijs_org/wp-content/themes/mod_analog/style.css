@@ -2427,6 +2427,15 @@ body footer .my-site-cp {
 	}
 }
 
+@media screen and (max-width: 1000px) {
+	.main-navigation .menu > li > a {
+		width: 180px;
+	}
+	.main-navigation .sub-menu a {
+		width: 160px;
+	}
+}
+
 @media screen and (max-width: 850px) {
 	.columns {
 		display: block;
@@ -2449,6 +2458,9 @@ body footer .my-site-cp {
 	}
 	body .main-navigation .menu .sub-menu {
 		top: -8px !important;
+	}
+	.main-navigation .menu > li > a {
+		width: 220px;
 	}
 	.main-navigation .sub-menu a {
 		width: 148px;

@@ -8,9 +8,9 @@ Author: Andy Stubbs
 */
 
 require( '_code-example/pijs-code-example.php' );
-//require( '_docs/pijs-docs.php' );
 require( '_my-editor/pijs-editor.php' );
+require( '_showcase/pijs-showcase.php' );
 
 new Pijs_Code_Example();
-//new Pijs_Docs();
 new Pijs_Editor();
+new Pijs_Showcase();
