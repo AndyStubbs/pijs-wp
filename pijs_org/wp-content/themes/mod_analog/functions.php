@@ -202,7 +202,11 @@ function analog_scripts(){
     if( ! is_customize_preview() ) {
     	wp_deregister_style('dashicons');
 	}
-    
+
+	if ( is_page_template( 'page-pixel.php' ) ) {
+		return;
+	}
+
     // load fontello
     wp_enqueue_style('analog-fontello', get_template_directory_uri() . '/assets/fontello/css/fontello.css' );
 	

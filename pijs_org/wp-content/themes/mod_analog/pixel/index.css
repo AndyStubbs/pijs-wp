@@ -1,0 +1,953 @@
+html, body {
+	width: calc(100% - 10px);
+	height: calc(100% - 10px);
+	margin: 0;
+	padding: 5px;
+}
+div {
+	margin: 0;
+}
+.back-light {
+	background-image: url("transparent-block-light.png");
+}
+.back-med {
+	background-image: url("transparent-block-med.png");
+}
+.back-dark {
+	background-image: url("transparent-block-dark.png");
+}
+.back-mix {
+	background-image: url("transparent-block-mix.png");
+	background-size: 24px;
+}
+#leftContainer {
+	vertical-align: top;
+	display: inline-block;
+	width: 335px;
+	height: calc(100% - 35px);
+	margin: 0;
+}
+#screenContainer {
+	display: inline-block;
+	vertical-align: top;
+	width: calc(100% - 695px);
+	height: calc(100% - 35px);
+}
+#rightContainer {
+	display: inline-block;
+	width: 350px;
+	height: calc(100% - 35px);
+	vertical-align: top;
+	margin: 0;
+	font-size: 0;
+}
+#preview {
+	overflow-y: auto;
+	height: calc(100% - 30px);
+}
+@media screen and (max-width: 1600px) {
+	#rightContainer {
+		width: 250px;
+	}
+	#preview {
+		height: calc(100% - 55px);
+	}
+	#screenContainer {
+		width: calc(100% - 595px);
+	}
+}
+@media screen and (max-width: 1500px) {
+	#rightContainer {
+		width: 130px;
+	}
+	#preview {
+		height: calc(100% - 80px);
+	}
+	#screenContainer {
+		width: calc(100% - 475px);
+	}
+	#rightContainer .controls .button {
+		width: 50px;
+	}
+}
+@media screen and (max-width: 1400px) {
+	#leftContainer {
+		width: 225px;
+	}
+	#leftContainer #colorbar {
+		height: 140px;
+	}
+	#leftContainer .color-row {
+		width: 17px;
+	}
+	.color-row .color-button {
+		width: 16px;
+		height: 16px;
+		line-height: 16px;
+		background-size: 16px;
+		margin-bottom: 0px;
+	}
+	#screenContainer {
+		width: calc(100% - 365px);
+	}
+	.controlButtons {
+		font-size: 0;
+	}
+	.controlButtons .button-long {
+		width: 75px;
+		margin-left: 0px;
+		font-size: 12px;
+		margin-right: 1px;
+	}
+	.controlButtons #helpButton {
+		margin-right: 0px;
+		width: 71px;
+	}
+}
+.controls {
+	display: inline-block;
+	vertical-align: top;
+	margin-bottom: 5px;
+	width: 100%;
+}
+.controls .button {
+	width: 60px;
+	height: 21px;
+	margin: 2px;
+}
+.button {
+	display: inline-block;
+	padding: 0;
+	font-size: 14px;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	outline: none;
+	margin-right: 1px;
+	margin-bottom: 2px;
+	width: 25px;
+	height: 25px;
+	line-height: 14px;
+}
+.button:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+.button-long {
+	width: 90px;
+	height: 21px;
+	margin: 2px;
+}
+#toolbar {
+	display: inline-block;
+	vertical-align: top;
+	width: 100%;
+	height: calc(100% - 200px);
+}
+#optionsbar {
+	margin-top: 5px;
+	height: calc(100% - 65px);
+	overflow: auto;
+}
+#optionsbar .option {
+	display: inline-block;
+	line-height: 24px;
+	vertical-align: top;
+	padding: 5px;
+	border: 1px solid black;
+	padding: 5px;
+	width: 140px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+#optionsbar .option-full {
+	width: 312px;
+}
+#screen {
+	height: 100%;
+	width: calc(100% - 206px);
+	display: inline-block;
+	overflow: hidden;
+	background-color: #ACACAC;
+	border: 1px solid black;
+}
+#screen canvas {
+	position: static !important;
+	margin: 0px !important;
+}
+#screen #grid {
+	width: 690px;
+	height: 690px;
+	position: absolute !important;
+	background-color: rgba(0,0,0,0);
+	background-image: none;
+}
+#layersContainer {
+	display: inline-block;
+	height: 100%;
+	width: 198px;
+	vertical-align: top;
+	border-right: 1px solid black;
+}
+#layersMenu input[type="button"] {
+	background-size: 15px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+#newLayer {
+	background-image: url(add.png);
+}
+#deleteLayer {
+	background-image: url(trash.png);
+}
+#mergeLayer {
+	background-image: url(merge-layers.png);
+}
+#copyLayer {
+	background-image: url(copy.png);
+}
+#moveLayerUp {
+	background-image: url(arrow-up.png);
+}
+#moveLayerDown {
+	background-image: url(arrow-down.png);
+}
+#layers {
+	overflow: auto;
+	height: calc(100% - 40px);
+}
+.layer-item {
+	width: calc(100% - 23px);
+	height: 125px;
+	margin: 5px;
+	padding: 5px;
+}
+.layer-item .slider {
+	margin-bottom: 10px;
+}
+.layer-item input[type="checkbox"] {
+	vertical-align: top;
+}
+.layer-image {
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	margin-left: 15px;
+}
+.selected-layer {
+	box-shadow: 0px 0px 1px 2px #9C27B0;
+	background-color: #69d9dc;
+}
+#layers canvas {
+	border: 1px solid black;
+	position: static !important;
+}
+#statusbar {
+	display: inline-block;
+	background-color: #8c8c8c59;
+	height: 30px;
+	width: 100%;
+	line-height: 30px;
+	padding-left: 5px;
+	border-radius: 15px;
+	margin-top: 5px;
+}
+#statusbar div {
+	display: inline-block;
+	image-rendering: pixelated;
+}
+#statusColor1 {
+	margin-left: 10px;
+}
+.status-color {
+	border: 1px solid black;
+	width: 24px;
+	height: 24px;
+	margin-top: 2px;
+}
+.status-color div {
+	width: 24px;
+	height: 24px;
+}
+#statusMsg {
+	vertical-align: top;
+}
+#alpha-slider {
+	margin: 5px;
+}
+.slider-span {
+	color: black;
+	font-weight: 900;
+	width: 40px;
+	display: inline-block;
+}
+.slider {
+	display: inline-block;
+	width: calc(100% - 48px);
+	height: 10px;
+	--SliderColor: black;
+	-webkit-appearance: none;
+	border-radius: 5px;
+	outline: none;
+	opacity: 0.7;
+	-webkit-transition: .2s;
+	transition: opacity .2s;
+	background-image: linear-gradient(to right, rgba(0,0,0,0), black);
+	vertical-align: top;
+}
+.slider:hover {
+	opacity: 1;
+}
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 25px;
+	height: 25px;
+	border-radius: 50%; 
+	background-image: url("alpha-dot.png");
+	border: 1px solid black;
+	cursor: pointer;
+}
+.slider::-moz-range-thumb {
+	width: 25px;
+	height: 25px;
+	border-radius: 50%; 
+	background-image: url("alpha-dot.png");
+	border: 1px solid black;
+	cursor: pointer;
+}
+#colorbar {
+	display: inline-block;
+	height: 180px;
+	padding-left: 1px;
+}
+.color-row {
+	display: inline-block;
+	width: 25px;
+	vertical-align: top;
+	image-rendering: pixelated;
+}
+.color-button {
+	width: 22px;
+	height: 22px;
+	display: inline-block;
+	line-height: 22px;
+	text-align: center;
+	font-weight: bold;
+	margin-bottom: 1px;
+	cursor: pointer;
+	border: 1px solid black;
+}
+.previewItem {
+	width: 100px;
+	height: 100px;
+	display: inline-block;
+	vertical-align: top;
+	margin: 5px;
+	cursor: pointer;
+}
+.foreground-overlay::after {
+	content: "*";
+	position: relative;
+	top: -22px;
+	left: 88px;
+	color: #770419;
+	font-weight: 900;
+	font-size: 24px;
+}
+.previewItem canvas {
+	background-color: rgba(0, 0, 0, 0) !important;
+	border: 1px inset black;
+	position: static !important;
+}
+.selected-color {
+	box-shadow: 0px 4px 0px -2px #FFFFFF,
+				0px -4px 0px -2px #FFFFFF,
+				4px 0px 0px -2px #FFFFFF,
+				-4px 0px 0px -2px #FFFFFF,
+				0px 0px 0px 2px rgb(1, 80, 94),
+				0px 0px 0px 2px rgba(255,0,0,0);
+	color: white;
+}
+.sel-color-1, .sel-color-2 {
+	text-shadow: 0px 0px 4px black;
+}
+#tools {
+	width: 100%;
+	border-bottom: 1px solid black;
+	padding-bottom: 10px;
+}
+.selected-tool {
+	box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.85);
+}
+.tool-button {
+	width: 34px;
+	height: 34px;
+	display: inline-block;
+	vertical-align: middle;
+	margin: 2px;
+	font-size: 23px;
+	text-align: center;
+	cursor: pointer;
+	border: 1px solid black;
+}
+.tool-button > div {
+	width: 32px;
+	height: 32px;
+	margin: 1px;
+}
+.noselect {
+	-webkit-touch-callout: none; /* iOS Safari */
+	  -webkit-user-select: none; /* Safari */
+	   -khtml-user-select: none; /* Konqueror HTML */
+		 -moz-user-select: none; /* Old versions of Firefox */
+		  -ms-user-select: none; /* Internet Explorer/Edge */
+			  user-select: none; /* Non-prefixed version, currently
+									supported by Chrome, Opera and Firefox */
+}
+#dragOverPopup {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.25);
+	display: none;
+}
+#dragOverPopup div {
+	width: 90%;
+	height: 90%;
+	border: 4px dashed black;
+	position: absolute;
+	left: 5%;
+	top: 5%;
+}
+#dragOverPopup h1 {
+	text-align: center;
+	color: #901e02;
+	margin-top: 100px;
+	font-size: xxx-large;
+}
+#modalPopup {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: none;
+}
+#modalPopup > div {
+	display: none;
+}
+.imagePopup {
+	position: absolute;
+	border: 2px solid black;
+	border-radius: 15px;
+	left: 50%;
+	top: 30%;
+	padding: 15px;
+	background-color: white;
+}
+.imagePopup h3 {
+	margin-top: 0px;
+	text-align: center;
+}
+#newImagePopup {
+	width: 300px;
+	height: 190px;
+	margin-left: -150px;
+	margin-top: -95px;
+}
+#loadImagePopup {
+/*	width: 380px;
+	height: 230px;
+	margin-left: -190px;
+	margin-top: -115px;*/
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 320px;
+	height: 200px;
+}
+#loadImagePopup.fullsize {
+	width: 80%;
+	height: 60%;
+	min-width: 600px;
+	min-height: 400px;
+}
+#loadImagePopup.midsize {
+	width: 550px;
+	height: 300px;
+}
+#saveImagePopup {
+	width: 330px;
+	height: 220px;
+	margin-left: -165px;
+	margin-top: -110px;
+}
+.loadImageMidSection {
+	width: 100%;
+	height: calc(100% - 120px);
+}
+#loadImageViewer {
+	/*background-image: url("transparent-block.png");*/
+	display: inline-block;
+	width: calc(100% - 235px);
+	height: 100%;
+	vertical-align: top;
+	image-rendering: pixelated;
+}
+#workspacePreview {
+	display: block;
+	width: 100%;
+	height: calc(100% - 145px);
+	image-rendering: pixelated;
+}
+.important {
+	font-weight: bold;
+	font-size: large;
+	margin: 15px;
+}
+.editSpritesheetFrames {
+	display: inline-block;
+	width: 230px;
+	height: 100%;
+}
+.editSpritesheetFrames input[type='button'] {
+	width: 100%;
+	font-size: large;
+	margin-top: 2.5px;
+	margin-bottom: 2.5px;
+}
+.editSpritesheetFrames input[type='button'].half {
+	width: calc(50% - 4px);
+}
+.editSpritesheetFrames input[type='button'].moveFrameButton {
+	width: 25px;
+	background-size: 15px;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+#btnMoveFrameUp {
+	background-image: url(arrow-up.png);
+}
+#btnMoveFrameDown {
+	background-image: url(arrow-down.png);
+}
+.newImageSpritesheetSection {
+	border-bottom: 1px solid black;
+	padding-bottom: 5px;
+	margin-bottom: 5px;
+}
+#loadImageViewer > canvas, #workspacePreview > canvas {
+	background-color: rgba(0 , 0, 0, 0) !important;
+}
+.newImageItem {
+	margin-bottom: 5px;
+}
+.newImageItem span {
+	display: inline-block;
+	width: 100px;
+}
+.newImageItem input {
+	width: 60px;
+}
+#newImageItemMessage {
+	margin: 5px;
+	display: block;
+	font-weight: bold;
+}
+.error {
+	color: red;
+	font-weight: bold;
+}
+#loadImageSpritesheet {
+	margin-top: 5px;
+}
+.newImageControls {
+	position: absolute;
+	bottom: 10px;
+	left: 70px;
+}
+.newImageControls .button {
+	height: 30px;
+}
+#loadImageFile {
+	min-width: calc(100% - 240px);
+	margin-bottom: 10px;
+}
+#selAllFrames {
+	width: 100%;
+	height: calc(100% - 255px);
+	overflow-y: auto;
+	margin-bottom: 3px;
+}
+#loadingDiv {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(33, 22, 226, 1);
+	transition: 1s;
+	transition-timing-function: ease-in-out;
+	color: white;
+	text-align: center;
+}
+#loadingDiv > div {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 300px;
+	height: 300px;
+	margin-left: -150px;
+	margin-top: -150px;
+}
+#optionsTemplates {
+	display: none;
+}
+#optionsTemplates > div {
+	display: none;
+}
+.clickOptionContainer > div {
+	font-size: 16px;
+	border: 1px solid black;
+	height: 22px;
+	line-height: 22px;
+	padding: 0px 2px;
+	cursor: pointer;
+	display: inline-block;
+	margin-bottom: 5px;
+}
+#shapeOption > div {
+	font-size: 48px;
+}
+.selected-clickOption {
+	border: 1px solid rgb(0, 114, 114);
+	background-color: rgba(33, 22, 226, 0.25);
+}
+.clickOptionContainer > label {
+	vertical-align: top;
+}
+#selectorMove {
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: none;
+	cursor: move;
+	opacity: 0.85;
+	background-image: url(move2.png);
+}
+#selectorAngle {
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: none;
+	cursor: grab;
+	opacity: 0.85;
+	background-image: url(rotate2.png);
+	color: white;
+	text-shadow: 0px 0px 14px black, 1px 1px 4px red, 0 0 6px blue, 0 0 2px blue;
+	font-weight: 900;
+	font-size: 14px;
+	line-height: 79px;
+}
+.selectorDot {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: none;
+	text-align: center;
+	line-height: 20px;
+	font-size: 48px;
+	vertical-align: middle;
+	opacity: 0.85;
+	background-image: url(dot2.png);
+}
+.controlPoint {
+	background-image: url(dot.png);
+	font-size: 20px;
+	color: greenyellow;
+	opacity: 1;
+}
+#selectorNW {
+	cursor: nw-resize;
+}
+#selectorN {
+	cursor: n-resize;
+}
+#selectorNE {
+	cursor: ne-resize;
+}
+#selectorE {
+	cursor: E-resize;
+}
+#selectorSE {
+	cursor: se-resize;
+}
+#selectorS {
+	cursor: s-resize;
+}
+#selectorSW {
+	cursor: sw-resize;
+}
+#selectorW {
+	cursor: w-resize;
+}
+#backgroundOption > div {
+	height: 28px;
+	width: 28px;
+	padding: 0;
+}
+#backgroundOption > div > div {
+	width:24px;
+	height: 24px;
+	margin-left: 2px;
+	margin-top: 2px;
+}
+
+#backgroundLight > div {
+	background-image: url(transparent-block-light.png);
+}
+#backgroundMed > div {
+	background-image: url(transparent-block-med.png);
+}
+#backgroundDark > div {
+	background-image: url(transparent-block-dark.png);
+}
+#backgroundMix > div {
+	background-image: url(transparent-block-mix.png);
+	background-size: 24px;
+	image-rendering: pixelated;
+}
+.colorPicker {
+	display: none;
+	position: absolute;
+	width: 24px;
+	height: 24px;
+	border: 1px solid black;
+	border-radius: 14px;
+	image-rendering: pixelated;
+}
+.colorPicker div {
+	width: 22px;
+	height: 22px;
+	border-radius: 11px;
+	margin: 1px;
+	background-color: red;
+}
+#shapeToolOption .shapeTool {
+	width: 25px;
+	height: 25px;
+	background-position-x: center;
+	background-position-y: center;
+	background-repeat: no-repeat;
+	margin-right: 1px;
+	margin-bottom: 2px;
+}
+#shapeToolLine {
+	background-image: url("line.png");
+}
+#shapeToolCurve {
+	background-image: url("curve.png");
+}
+#shapeToolRect {
+	background-image: url("rectangle.png");
+}
+#shapeToolEllipse {
+	background-image: url("ellipse.png");
+}
+#shapeToolCircle {
+	background-image: url("circle.png");
+}
+#shapeToolStar {
+	background-image: url("star-small.png");
+}
+#shapeToolArrow {
+	background-image: url("arrow.png");
+}
+#screen #grid.cursor-pen-tool {
+	cursor: url("pencil-cursor.png") 2 2, auto;
+}
+#screen #grid.cursor-eraser-tool {
+	cursor: url("eraser-cursor.png") 2 2, auto;
+}
+#screen #grid.cursor-shape-tool {
+	cursor: url("shape-cursor.png") 2 2, auto;
+}
+#screen #grid.cursor-paint-tool {
+	cursor: url("paint-cursor.png") 4 24, auto;
+}
+#screen #grid.cursor-dropper-tool {
+	cursor: url("dropper-cursor.png") 6 22, auto;
+}
+#screen #grid.cursor-selector-tool {
+	cursor: url("selector-cursor.png") 2 2, auto;
+}
+#screen #grid.cursor-zoom-tool {
+	cursor: url("zoom-cursor.png") 12 12, auto;
+}
+#animatorPopup {
+	position: absolute;
+	width: 95%;
+	height: 95%;
+	border: 1px solid black;
+	background-color: white;
+	left: 2.5%;
+	top: 2.5%;
+}
+#animatorWindow {
+	width: 100%;
+	height: calc(80% - 30px);
+}
+#animatorControls {
+	width: 100%;
+	height: 30px;
+	background-color: #8fbea0;
+}
+#animatorControls input[type="button"] {
+	margin-left: 5px;
+	width: 105px;
+	margin-top: 5px;
+	margin-right: 0px;
+}
+#animatorFramesContainer {
+	width: 100%;
+	height: 20%;
+	overflow-x: scroll;
+}
+#animatorFrames {
+	height: 100%;
+}
+#animatorFrames canvas {
+	border: 1px solid black;
+	margin: 2px;
+	image-rendering: pixelated;
+	cursor: pointer;
+}
+#animatorCanvas {
+	image-rendering: pixelated;
+	width: 0;
+	height: 0;
+}
+#animatorSize {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 200px;
+	height: 50px;
+	padding: 10px;
+	font-size: 18px;
+}
+#animatorPickFrame {
+	display: none;
+	position: absolute;
+	width: 90%;
+	height: 90%;
+	left: 5%;
+	top: 5%;
+	border: 1px solid black;
+	background-color: white;
+}
+#animatorSelectFrame {
+	image-rendering: pixelated;
+	width: 100%;
+	height: calc(100% - 35px);
+	overflow: auto;
+}
+#animatorSelectFrame canvas {
+	border: 1px solid black;
+	margin: 5px;
+	cursor: pointer;
+}
+#helpPopup {
+	position: absolute;
+	width: calc(100% - 10px);
+	height: calc(100% - 10px);
+	background-color: white;
+	left: 0;
+	top: 0;
+	padding: 5px;
+	margin: 0;
+}
+#helpPopup h2 {
+	text-align: center;
+}
+#helpPopup img {
+	width: calc(100% - 330px);
+}
+#helpMessage {
+	display: inline-block;
+	vertical-align: top;
+	width: 310px;
+	margin: 5px;
+	height: calc(100% - 15px);
+	overflow-y: auto;
+}
+#helpMessage div {
+	display: none;
+}
+#helpMessage .activeHelpMessage {
+	display: block;
+}
+.helpNavigation {
+	border-bottom: 1px solid black;
+}
+.helpNavigation div {
+	display: inline-block;
+	margin-left: 5px;
+}
+.helpNavButton {
+	width: 36px;
+	height: 36px;
+	border: 1px solid black;
+	border-radius: 5px;
+	background-size: 32px;
+	background-position: center;
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+.helpNavButton:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+.helpNavButton:hover {
+	background-color: rgba(225,225,225,0.9);
+}
+#helpLeft {
+	background-image: url(helpLeft.png);
+}
+#helpRight {
+	background-image: url(helpRight.png);
+}
+#helpTitle {
+	font-size: 16px;
+	font-weight: bold;
+	width: calc(100% - 86px);
+	position: relative;
+	top: 7px;
+	text-align: center;
+	vertical-align: top;
+}
+#shapeSquare {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	vertical-align: top;
+}
+#shapeSquare div {
+	background-color: black;
+	margin: auto;
+	height: 14px;
+	width: 14px
+}

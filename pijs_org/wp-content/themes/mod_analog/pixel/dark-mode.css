@@ -1,0 +1,153 @@
+body.dark-mode {
+	background-color: #343434;
+	color: #d8d8d8;
+}
+body.dark-mode #optionsbar .option {
+	border: 1px solid white;
+}
+body.dark-mode #screen {
+	background-color: #ACACAC;
+	border: 1px solid white;
+}
+body.dark-mode #screen #grid {
+	background-color: white;
+}
+body.dark-mode #layersContainer {
+	border-right: 1px solid white;
+}
+body.dark-mode .selected-layer {
+	box-shadow: 0px 0px 1px 2px #9C27B0;
+	background-color: #69d9dc;
+}
+body.dark-mode #layers canvas {
+	border: 1px solid white;
+}
+body.dark-mode #statusbar {
+	background-color: #8c8c8c59;
+}
+body.dark-mode .status-color {
+	border: 1px solid white;
+}
+body.dark-mode .slider-span {
+	color: white;
+}
+body.dark-mode .slider {
+	--SliderColor: white;
+	background-image: linear-gradient(to right, white, rgba(0,0,0,0));
+}
+body.dark-mode .slider::-webkit-slider-thumb {
+	border: 1px solid white;
+}
+body.dark-mode .slider::-moz-range-thumb {
+	border: 1px solid white;
+}
+body.dark-mode .color-button {
+	border: 1px solid white;
+}
+body.dark-mode .foreground-overlay::after {
+	color: #770419;
+}
+body.dark-mode .previewItem canvas {
+	background-color: rgba(0, 0, 0, 0) !important;
+	border: 1px inset white;
+}
+body.dark-mode .selected-color {
+	box-shadow: 0px 4px 0px -2px #FFFFFF,
+				0px -4px 0px -2px #FFFFFF,
+				4px 0px 0px -2px #FFFFFF,
+				-4px 0px 0px -2px #FFFFFF,
+				0px 0px 0px 2px rgb(1, 80, 94),
+				0px 0px 0px 2px rgba(255,0,0,0);
+	color: #121212;
+}
+body.dark-mode .sel-color-1, body.dark-mode .sel-color-2 {
+	text-shadow: 0px 0px 4px white;
+}
+body.dark-mode #tools {
+	border-bottom: 1px solid white;
+}
+body.dark-mode .selected-tool {
+	box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.85);
+}
+body.dark-mode .tool-button {
+	border: 1px solid white;
+}
+body.dark-mode #dragOverPopup {
+	background-color: rgba(0, 0, 0, 0.25);
+}
+body.dark-mode #dragOverPopup div {
+	border: 4px dashed white;
+}
+body.dark-mode #dragOverPopup h1 {
+	color: #901e02;
+}
+body.dark-mode #modalPopup {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+body.dark-mode .imagePopup {
+	border: 2px solid white;
+	background-color: #121212;
+}
+body.dark-mode .newImageSpritesheetSection {
+	border-bottom: 1px solid white;
+}
+body.dark-mode #loadImageViewer > canvas, body.dark-mode #workspacePreview > canvas {
+	background-color: rgba(0 , 0, 0, 0) !important;
+}
+body.dark-mode .error {
+	color: red;
+	font-weight: bold;
+}
+body.dark-mode #loadingDiv {
+	background-color: rgba(33, 22, 226, 1);
+	color: #121212;
+}
+body.dark-mode .clickOptionContainer > div {
+	border: 1px solid white;
+}
+body.dark-mode .selected-clickOption {
+	border: 1px solid rgb(0, 114, 114);
+	background-color: rgba(33, 22, 226, 0.25);
+}
+body.dark-mode #selectorAngle {
+	color: #121212;
+	text-shadow: 0px 0px 14px white, 1px 1px 4px red, 0 0 6px blue, 0 0 2px blue;
+}
+body.dark-mode .colorPicker {
+	border: 1px solid white;
+}
+body.dark-mode .colorPicker div {
+	background-color: red;
+}
+body.dark-mode #animatorPopup {
+	border: 1px solid white;
+	background-color: #121212;
+}
+body.dark-mode #animatorControls {
+	background-color: #8fbea0;
+}
+body.dark-mode #animatorFrames canvas {
+	border: 1px solid white;
+}
+body.dark-mode #animatorPickFrame {
+	border: 1px solid white;
+	background-color: #121212;
+}
+body.dark-mode #animatorSelectFrame canvas {
+	border: 1px solid white;
+}
+body.dark-mode #helpPopup {
+	background-color: #121212;
+}
+body.dark-mode .helpNavigation {
+	border-bottom: 1px solid white;
+}
+body.dark-mode .helpNavButton {
+	border: 1px solid white;
+}
+body.dark-mode .helpNavButton:hover {
+	background-color: rgba(225,225,225,0.9);
+}
+body.dark-mode #shapeSquare div {
+	background-color: white;
+}

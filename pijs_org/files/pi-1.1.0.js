@@ -1,11 +1,11 @@
 /*
 * https://www.pijs.org/
 * Pi.js
-* Version: 1.0.0
+* Version: 1.1.0
 * Copyright Andy Stubbs
 * Released under the Apache License 2.0
 * https://www.apache.org/licenses/LICENSE-2.0
-* Date: 2023-01-20
+* Date: 2023-03-02
 * @preserve
 */
 
@@ -45,7 +45,8 @@ window.pi = ( function () {
 		"settingsList": [],
 		"volume": 0.75,
 		"log": logError,
-		"isTouchScreen": false
+		"isTouchScreen": false,
+		"defaultInputFocus": window
 	};
 
 	// PI api
@@ -397,6 +398,28 @@ window.pi = ( function () {
 		return colors;
 	}
 
+	// Set the default input focus element
+	addCommand( "setDefaultInputFocus", setDefaultInputFocus, false, false, [ "element" ] );
+	addSetting( "defaultInputFocus", setDefaultInputFocus, false, [ "element" ] );
+	function setDefaultInputFocus( args ) {
+		var element = args[ 0 ];
+		if( typeof element === "string" ) {
+			element = document.getElementById( element );
+		}
+		if( !pi.util.canAddEventListeners( element ) ) {
+			m_piData.log( "setDefaultInputFocus: Invalid argument element. Element must be a" +
+				" DOM element or a string id of a DOM element."
+			);
+			return;
+		}
+		if( !( element.tabIndex >= 0 ) ) {
+			element.tabIndex = 0;
+		}
+		m_piData.defaultInputFocus = element;
+		m_piData.commands[ "reinitGamepads" ]();
+		m_piData.commands[ "reinitKeyboard" ]();
+	}
+
 	// Global settings command
 	addCommand( "set", set, false, true, m_piData.settingsList, true );
 	function set( screenData, args ) {
@@ -471,32 +494,7 @@ window.pi = ( function () {
 
 	function noError() {}
 
-	let m_mapStr = "";
-	setTimeout( function () {
-		let commands = m_commandList;
-		m_mapStr = "var $ = {";
-		for( let i = 0; i < commands.length; i++ ) {
-			m_mapStr += "\"" + commands[ i ].name + "\"" + ": function(";
-			if( commands[ i ].name === "set" ) {
-				commands[ i ].parameters = [ "settings" ];
-			}
-			for( let j = 0; j < commands[ i ].parameters.length; j++ ) {
-				if( j > 0 ) {
-					m_mapStr += ",";
-				}
-				m_mapStr += " " + commands[ i ].parameters[ j ];
-				if( j === commands[ i ].parameters.length - 1 ) {
-					m_mapStr += " ";
-				}
-			}
-			m_mapStr += ") { /* " + commands[ i ].name + " */ }, "
-			delete m_api[ commands[ i ].name ];
-		}
-		m_mapStr += "}; var pi = $;";
-		delete m_api[ "util" ];
-		m_api.getMap = function () { return m_mapStr; }
-	} );
-
+	//[EXTRA_BUILD_COMMAND]
 
 	return m_api;
 
@@ -514,6 +512,10 @@ window.pi.util = ( function () {
 
 	function isDomElement( el ) {
 		return el instanceof Element;
+	}
+
+	function canAddEventListeners( el ) {
+		return typeof el.addEventListener === 'function' && typeof el.removeEventListener === 'function';
 	}
 
 	function hexToColor( hex ) {
@@ -831,6 +833,7 @@ window.pi.util = ( function () {
 	// Setup commands that will run only in the pi api
 	var api = {
 		"binarySearch": binarySearch,
+		"canAddEventListeners": canAddEventListeners,
 		"checkColor": checkColor,
 		"clamp": clamp,
 		"colorStringToHex": colorStringToHex,
@@ -919,7 +922,7 @@ window.pi.util = ( function () {
 var m_piData, m_keys, m_keyKeys, m_keyLookup, m_keyCodes, m_preventKeys,
 	m_inputs, m_inputIndex, m_t, m_promptInterval, m_blink, m_promptBackground,
 	m_promptBackgroundWidth, m_onKeyEventListeners, m_anyKeyEventListeners, m_keyboard,
-	m_isKeyEventsActive, m_onKeyCombos, pi;
+	m_isKeyEventsActive, m_onKeyCombos, pi, m_inputFocus;
 
 pi = window.pi;
 m_piData = pi._.data;
@@ -1165,6 +1168,7 @@ m_keyboard = {
 };
 m_keyboard.format = m_keyboard.formats[ 0 ];
 m_isKeyEventsActive = false;
+m_inputFocus = null;
 
 initOnscreenKeyboard();
 
@@ -1233,13 +1237,22 @@ function initOnscreenKeyboard() {
 	}
 }
 
+pi._.addCommand( "reinitKeyboard", reinitKeyboard, true, false, [] );
+function reinitKeyboard() {
+	if( m_isKeyEventsActive ) {
+		stopKeyboard();
+		startKeyboard();
+	}
+}
+
 // Set keyboard event listeners
 pi._.addCommand( "startKeyboard", startKeyboard, false, false, [] );
 function startKeyboard() {
 	if( ! m_isKeyEventsActive ) {
-		document.addEventListener( "keyup", keyup );
-		document.addEventListener( "keydown", keydown );
-		window.addEventListener( "blur", clearPressedKeys );
+		m_inputFocus = m_piData.defaultInputFocus;
+		m_inputFocus.addEventListener( "keyup", keyup );
+		m_inputFocus.addEventListener( "keydown", keydown );
+		m_inputFocus.addEventListener( "blur", clearPressedKeys );
 		m_isKeyEventsActive = true;
 	}
 }
@@ -1248,9 +1261,12 @@ function startKeyboard() {
 pi._.addCommand( "stopKeyboard", stopKeyboard, false, false, [] );
 function stopKeyboard() {
 	if( m_isKeyEventsActive ) {
-		document.removeEventListener( "keyup", keyup );
-		document.removeEventListener( "keydown", keydown );
-		window.removeEventListener( "blur", clearPressedKeys );
+		if( !m_inputFocus ) {
+			m_inputFocus = m_piData.defaultInputFocus;
+		}
+		m_inputFocus.removeEventListener( "keyup", keyup );
+		m_inputFocus.removeEventListener( "keydown", keydown );
+		m_inputFocus.removeEventListener( "blur", clearPressedKeys );
 		m_isKeyEventsActive = false;
 	}
 }
@@ -2302,7 +2318,8 @@ function setInputCursor( screenData, args ) {
 "use strict";
 
 var m_piData, m_controllers, m_controllerArr, m_events, m_gamepadLoopId,
-	m_Modes, m_isLooping, m_loopInterval, m_axesSensitivity, pi;
+	m_Modes, m_isLooping, m_loopInterval, m_axesSensitivity, pi, m_inputFocus,
+	m_init;
 
 pi = window.pi;
 m_piData = pi._.data;
@@ -2328,9 +2345,27 @@ m_Modes = [
 m_isLooping = false;
 m_loopInterval = 8;
 m_axesSensitivity = 0.2;
+m_init = false;
+m_inputFocus = null;
 
-window.addEventListener( "gamepadconnected", gamepadConnected );
-window.addEventListener( "gamepaddisconnected", gamepadDisconnected );
+
+pi._.addCommand( "reinitGamepads", reinitGamepads, true, false, [], false );
+function reinitGamepads() {
+	if( m_init ) {
+		if( m_inputFocus ) {
+			m_inputFocus.removeEventListener( "gamepadconnected", gamepadConnected );
+			m_inputFocus.removeEventListener( "gamepaddisconnected", gamepadDisconnected );
+		}
+		initGamepads();
+	}
+}
+
+function initGamepads() {
+	m_inputFocus = m_piData.defaultInputFocus;
+	m_inputFocus.addEventListener( "gamepadconnected", gamepadConnected );
+	m_inputFocus.addEventListener( "gamepaddisconnected", gamepadDisconnected );
+	m_init = true;
+}
 
 function gamepadConnected( e ) {
 	m_controllers[ e.gamepad.index ] = e.gamepad;
@@ -2348,6 +2383,9 @@ function gamepadDisconnected( e ) {
 
 pi._.addCommand( "ingamepads", ingamepads, false, false, [] );
 function ingamepads() {
+	if( !m_init ) {
+		initGamepads();
+	}
 	if( m_controllers ) {
 		updateControllers();
 	}
@@ -2358,6 +2396,9 @@ pi._.addCommand( "ongamepad", ongamepad, false, false,
 	[ "gamepadIndex", "mode", "item", "fn", "once", "customData" ] );
 function ongamepad( args ) {
 	var mode, item, fn, once, gamepadIndex, extraData, customData;
+	if( !m_init ) {
+		initGamepads();
+	}
 
 	gamepadIndex = args[ 0 ];
 	mode = args[ 1 ];
@@ -3646,7 +3687,7 @@ function getSize( element ) {
 }
 
 // Any time the screen resizes need to resize canvas too
-window.addEventListener( "resize", resizeScreens );
+m_piData.defaultInputFocus.addEventListener( "resize", resizeScreens );
 
 // End of File Encapsulation
 } )();
