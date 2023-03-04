@@ -18,10 +18,9 @@ class Pijs_Showcase {
 	}
 
 	function showcase_shortcode( $atts, $content = null ) {
-		//$this->showcaseUrl = plugins_url( $showcaseName, __FILE__ );
-		//$this->showcaseDir = plugin_dir_path( __FILE__ ) . "/$showcaseName";
 		$atts = shortcode_atts( array(
-			'demo' => 'platformer'
+			'demo' => 'platformer',
+			'scrollable' => false
 		), $atts );
 
 		$showcaseName = $atts[ 'demo' ];
@@ -33,6 +32,12 @@ class Pijs_Showcase {
 			$template .= $this->get_dr_ascii_scripts( $showcaseUrl );
 		} elseif( $showcaseName == 'pirate' ) {
 			$template .= $this->get_pirate_scripts( $showcaseUrl );
+		}
+
+		if( $atts[ 'scrollable' ] ) {
+			$template .= "<script>" .
+					"setTimeout( function() { document.querySelector('#showcase canvas').style.position = 'static'; }, 100 );" .
+				"</script>";
 		}
 		$template .= $this->get_link_scripts( $showcaseUrl );
 		return $template;
