@@ -23,6 +23,7 @@ html, body {
 .main-editor-body {
 	width: 100%;
 	height: calc(100% - 20px);
+	background-color: rgb(30,30,30);
 }
 
 .main-image-viewer {
