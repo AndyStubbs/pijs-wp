@@ -1,18 +1,18 @@
 /*
 * https://www.pijs.org/
 * Pi.js
-* Version: 1.1.2
+* Version: 1.1.0
 * Copyright Andy Stubbs
 * Released under the Apache License 2.0
 * https://www.apache.org/licenses/LICENSE-2.0
-* Date: 2023-03-04
+* Date: 2023-03-02
 * @preserve
 */
 
-window.piExtra = ( function () {
+window.pi = ( function () {
 	"use strict";
 
-	var m_piData, m_api, m_waiting, m_waitCount, m_readyList, m_commandList, m_startReadyListTimeout, pi;
+	var m_piData, m_api, m_waiting, m_waitCount, m_readyList, m_commandList, m_startReadyListTimeout;
 
 	m_waitCount = 0;
 	m_waiting = false;
@@ -63,9 +63,6 @@ window.piExtra = ( function () {
 			"wait": wait
 		}
 	};
-
-	// Pi alias
-	pi = m_api;
 
 	// Add a command to the internal list
 	function addCommand( name, fn, isInternal, isScreen, parameters, isSet ) {
@@ -409,7 +406,7 @@ window.piExtra = ( function () {
 		if( typeof element === "string" ) {
 			element = document.getElementById( element );
 		}
-		if( !element || !pi.util.canAddEventListeners( element ) ) {
+		if( !pi.util.canAddEventListeners( element ) ) {
 			m_piData.log( "setDefaultInputFocus: Invalid argument element. Element must be a" +
 				" DOM element or a string id of a DOM element."
 			);
@@ -530,10 +527,8 @@ window.piExtra = ( function () {
 /*
 * File: pi-util.js
 */
-window.piExtra.util = ( function () {
+window.pi.util = ( function () {
 	"use strict";
-
-	var pi = window.piExtra;
 
 	function isFunction( fn ) {
 		return fn &&
@@ -954,7 +949,7 @@ var m_piData, m_keys, m_keyKeys, m_keyLookup, m_keyCodes, m_preventKeys,
 	m_promptBackgroundWidth, m_onKeyEventListeners, m_anyKeyEventListeners, m_keyboard,
 	m_isKeyEventsActive, m_onKeyCombos, pi, m_inputFocus;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 m_keyLookup = {
 	"Alt_1": "AltLeft",
@@ -2351,7 +2346,7 @@ var m_piData, m_controllers, m_controllerArr, m_events, m_gamepadLoopId,
 	m_Modes, m_isLooping, m_loopInterval, m_axesSensitivity, pi, m_inputFocus,
 	m_init;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 
 // Object to track all controller data
@@ -2712,7 +2707,7 @@ function smoothAxis( axis ) {
 
 var m_piData, m_piWait, m_piResume, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 m_piWait = pi._.wait;
 m_piResume = pi._.resume;
@@ -3151,7 +3146,7 @@ function setChar( screenData, args ) {
 
 var m_piData, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 
 // Pi.js Core API
@@ -3732,7 +3727,7 @@ m_piData.defaultInputFocus.addEventListener( "resize", resizeScreens );
 
 var m_piData, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 
 pi._.addCommand( "startMouse", startMouse, false, true, [] );
@@ -3845,10 +3840,10 @@ function updateMouse( screenData, e, action ) {
 
 	rect = screenData.clientRect;
 	x = Math.floor(
-		e.offsetX / rect.width * screenData.width
+		( e.clientX - rect.left ) / rect.width * screenData.width
 	);
 	y = Math.floor(
-		e.offsetY / rect.height * screenData.height
+		( e.clientY - rect.top ) / rect.height * screenData.height
 	);
 
 	if( screenData.mouse ) {
@@ -4099,7 +4094,7 @@ function offclick( screenData, args ) {
 
 var m_piData, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 
 pi._.addCommand( "startTouch", startTouch, false, true, [] );
@@ -4411,7 +4406,7 @@ function setPinchZoom( args ) {
 
 var m_piData, m_maxDifference, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 m_maxDifference = ( 255 * 255 ) * 3.25;
 
@@ -4927,7 +4922,7 @@ function setAutoRender( screenData, args ) {
 
 var m_piData, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 
 pi._.addBlendCommand( "normal", normalBlend );
@@ -5211,7 +5206,7 @@ m_piData.defaultBlendCmd = normalBlend;
 
 var m_piData, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 
 // Circle command
@@ -6400,7 +6395,7 @@ function render( screenData ) {
 
 var m_piData, m_maxDifference, m_setPixel, m_pixels, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 //m_maxDifference = 195075;		// 255^2 * 3
 //m_maxDifference = 260100;		// 255^2 * 4
@@ -6563,7 +6558,7 @@ function floodCheck( screenData, x, y, fillColor, backgroundColor, tolerance ) {
 
 var m_piData, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 
 
@@ -6712,7 +6707,7 @@ function aaBezier( screenData, args ) {
 
 var m_piData, m_piWait, m_piResume, m_callback, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 m_piWait = pi._.wait;
 m_piResume = pi._.resume;
@@ -7179,7 +7174,7 @@ function drawItem(
 
 var m_piData, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 
 // Print Command
@@ -7518,7 +7513,7 @@ function getPosPx( screenData ) {
 	"use strict";
 	var m_piData, m_borderStyles, pi;
 
-	pi = window.piExtra;
+	pi = window.pi;
 	m_piData = pi._.data;
 
 	m_borderStyles = {
@@ -8045,7 +8040,7 @@ function getPosPx( screenData ) {
 
 var m_piData, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 
 pi._.addCommand( "draw", draw, false, true, [ "drawString" ] );
@@ -8266,7 +8261,7 @@ function draw( screenData, args ) {
 var m_piData, m_piWait, m_piResume, m_audioPools, m_nextAudioId,
 	m_audioContext, m_soundPool, m_nextSoundId, pi;
 
-pi = window.piExtra;
+pi = window.pi;
 m_piData = pi._.data;
 m_piWait = pi._.wait;
 m_piResume = pi._.resume;
@@ -8838,7 +8833,7 @@ function setVolume( args ) {
 	
 	var m_piData, m_tracks, m_notesData, m_allNotes, pi;
 
-	pi = window.piExtra;
+	pi = window.pi;
 	m_piData = pi._.data;
 
 	m_notesData = {
@@ -9400,8 +9395,7 @@ function setVolume( args ) {
 } )();
 ( function () {
 	"use strict";
-	var pi = window.piExtra;
-
+	
 	pi._.data.commands.loadFont( [ 
 	"0,14004,2602800,oidnrt,3po8cff,3vnhgs4,1uv77og,3hpuv70,73g00,3vjgoef,3o00000,0,71ji,k9o000,1sg,1ogoc3p,jp4ir8,19fvt51,31ovfn3,cevfh,31vrooc,1tv52h8,2g0kula,2d2hcsp,8r2jg0,3vvvj,f33opv,8efh0g,3ho84fj,2200idv,2c40237,3r4g000,87000i,3vv901h,3jptvvv,3vnjpsc,0,g8420,22h800,57p9,3p80ea7,237000i,889019,111cc02,0,88420g,g4211,28oc,140011o,1000000,11000,1s00000,400,3333100,sjam9o,1g8423,203i888,1s060ho,hg0654,2fgg1sg,1o2e01p,3p4e07,211hgg0,oi64hg,1h4e13,31g0c,o00100,gg444,41000v,v0010,1088803,2110080,sqb41o,1h4if4,20729oi,1o07421,1o0s94,19701sg,1sgf03p,3p0g03,384p4c0,14if4i8,1o8423,201o84i,s04ihg,2h40842,43o12r,1ul8g25,2blej03,28ka4s0,s97i10,1h4ib3,10729oi,140321g,ho0v21,21014i,14i6025,a4k404,1al9ok0,12a22i4,24k421,7g8og,1s06210,21g1gc3,30g0c2,42300g,2g00000,1v,o40000,1o2f3,10210s9,s003i1,1o0211,251g00c,14s700g,23gg800,6kjo4s,ge4i94,8021,g04,1884218,3180421,21000a,1ul8g01,3294i00,64i8o0,c5310,200ca30,2102ok8,g003j0,3jo0023,221000i,14i6g00,24k400,8lbsk0,a2118,14i70,2e01s44,u02230,20g0630,31g082,622019,1000001,74a5u0,sg83go,3i80i93,30110oi,1oe22jg,joqh07,17hlg4,1o2f39g,33g4u6j,2841o66,gkc971,34g0oie,e411h4,3gsi030,211osh6,423hg0,1g84720,230g8e9,c94jp4,1goi97i,133p0u8,u06pmr,1sjf94j,34i8c93,94hg0c,14i604l,3inbvgk,2603ooc,1tdvstn,3phsif4,2prfurv,2qc67i1,3ooe4n,42rp8k,gs473h,jh8ua3,561igo,ggc231,30gg842,e110oi,14c2229,i8o887,94i9si,1km94jh,301s003,2703o00,40108,3g000f4,u,40g951,108d0kc,630gg0,g84000,2a8i000,92a800,1404g28,2mkll5,1lbfvdv,2rv210g,10g8421,u10g9s,84u118,2hbka50,7oka,1s217g,11bka5e,252h8ka,ka0fg8,n8kat0,21fg0ka,lu000j,30g9s00,7g84,8421o0,g84vg,1v,84210g,1og8000,vg0084,9v210g,1og8722,252hcka,kb421s,u842,352nc00,3u00fo0,7cka5i,42p81v,vg1b,2o01r51,vg03u0,ka5fo0,3u00f,320001v,ka52h8,3o0043h,21o007,843h00,ua52,252nska,9v217s,10g84u0,7,84vvvv,3vvu000,vvvtgo,1goc60o,1goc63f,3vvo000,2e53g,hp5upf,287i90g,10g003s,2h81uh4,44no00,1ska200,18s880,etgg84,1sc94hh,3hh4u94,267k631,15jfk3p,2i9s0fb,1f0004u,2iuo01p,221so70,64i94i,3u0vg7s,gs40,e01088,1o0020g,23g0452,421042,425110,3g0800,5500kk,oi6000,400,c,1gg,12go062,252g1o2,88f000,1ose00",
 	6, 6, null, true 
@@ -9435,7 +9429,7 @@ function setVolume( args ) {
 "use strict";
 var pi;
 
-pi = window.piExtra;
+pi = window.pi;
 
 pi._.data.commands.setDefaultPal( [ [
 	"#000000","#0000AA","#00AA00","#00AAAA","#AA0000",
@@ -9491,13 +9485,13 @@ pi._.data.commands.setDefaultColor( [ 7 ] );
 
 var pi;
 
-pi = window.piExtra;
+pi = window.pi;
 
 // Create the API
 pi._.processCommands();
 
 if( window.$ === undefined ) {
-	//window.$ = window.piExtra;
+	window.$ = window.pi;
 }
 
 // Delete reference to internal functions

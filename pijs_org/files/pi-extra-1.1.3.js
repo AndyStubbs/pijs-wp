@@ -1,7 +1,7 @@
 /*
 * https://www.pijs.org/
 * Pi.js
-* Version: 1.1.2
+* Version: 1.1.3
 * Copyright Andy Stubbs
 * Released under the Apache License 2.0
 * https://www.apache.org/licenses/LICENSE-2.0
