@@ -59,7 +59,7 @@ var g_file = ( function () {
 				}
 			},
 			"fileLookup": {},
-			"tabs": []
+			"tabs": [ { "fileId": "1", "isSelected": true } ]
 		};
 		m_project.fileLookup[ ROOT_NAME ] = "0";
 		setFileContent( "0", [] );
@@ -415,6 +415,8 @@ var g_file = ( function () {
 						} else {
 							clone.content = getFileContentById( item.id );
 						}
+					} else {
+						isFullProject = false;
 					}
 				} else {
 					if( item.type === FILE_TYPE_SCRIPT ) {
@@ -429,9 +431,10 @@ var g_file = ( function () {
 		}
 
 		let filesClone = {};
+		let isFullProject = true;
 		cloneFiles( getFileById( 0 ), filesClone );
 
-		return filesClone;
+		return { "files": filesClone, "isFullProject": isFullProject };
 	}
 
 	function resetFilesChanged() {

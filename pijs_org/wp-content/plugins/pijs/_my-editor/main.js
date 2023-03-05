@@ -289,11 +289,12 @@ var g_main = ( function ( $ ) {
 			getOnlyRecentChanges = true;
 		}
 		let settings = g_file.getProjectSettings();
+		let filesData = g_file.getFilesForUpload( getOnlyRecentChanges );
 		let data = {
 			"action": "editor_run_program",
-			"files": g_file.getFilesForUpload( getOnlyRecentChanges ),
+			"files": filesData.files,
 			"title": settings.name,
-			"isFullProject": !getOnlyRecentChanges
+			"isFullProject": filesData.isFullProject
 		};
 		$.post( g_ajaxUrl, data, function ( dataReturn ) {
 			if( dataReturn.maxFileSizeExceeded ) {

@@ -40,7 +40,7 @@ class Pijs_Util {
 	}
 
 	function pijs_clean() {
-		error_log( "************************\nCalling clean function\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		//error_log( "************************\nCalling clean function\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		$parent_directory = dirname( ABSPATH );
 		$path = $parent_directory . '/pijs-run.org/runs';
 		$maxTime = 3600;  // 1 hour
@@ -52,7 +52,7 @@ class Pijs_Util {
 			if( is_dir( $filepath ) ) {
 				$modtime = filemtime( $filepath );
 				if( ( $t - $modtime ) > $maxTime ) {
-					error_log( "Deleting File: $filepath\n", 3, WP_CONTENT_DIR . '/debug.log' );
+					//error_log( "Deleting File: $filepath\n", 3, WP_CONTENT_DIR . '/debug.log' );
 					$this->deleteFolder( $filepath );
 				}
 			}
@@ -66,7 +66,7 @@ class Pijs_Util {
 
 		$allFiles = array_merge($filesFull, $filesMin, $filesMap);
 
-		error_log( "ALL FILES:\n" . print_r( $allFiles, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		//error_log( "ALL FILES:\n" . print_r( $allFiles, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 
 		$groupedFiles = array();
 
@@ -78,7 +78,7 @@ class Pijs_Util {
 			$groupedFiles[ $version ][ $file[ 'path' ] ] = $file;
 		}
 
-		error_log( "GROUPED FILES:\n" . print_r( $groupedFiles, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		//error_log( "GROUPED FILES:\n" . print_r( $groupedFiles, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 
 		$html = '';
 

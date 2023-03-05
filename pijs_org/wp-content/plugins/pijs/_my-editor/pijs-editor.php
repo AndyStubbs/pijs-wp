@@ -300,12 +300,18 @@ class Pijs_Editor {
 				if( substr( $filename, 0, 1 ) === '/' ) {
 					$filename = substr( $filename, 1 );
 				}
-				$this->scripts .= "\n\t\t" . '<script src="' . $filename . '"></script>';
+				$fvname = 'fv_' . str_replace( '/', '_', $filename );
+				if( !isset( $_SESSION[ $fvname ] ) ) {
+					$_SESSION[ $fvname ] = 0;
+				}
 				if( array_key_exists( 'content', $file ) ) {
 					file_put_contents( $filepath, base64_decode( $file[ 'content' ] ) );
+					$_SESSION[ $fvname ] += 1;
 				} else {
 					touch( $filepath );
 				}
+				$fileversion = $_SESSION[ $fvname ];
+				$this->scripts .= "\n\t\t" . '<script src="' . $filename . "?v=$fileversion" . '"></script>';
 			} elseif ( $file[ 'type' ] === 'image' ) {
 				$filepath = $projectpath . $path . '/' . $name;
 				if( array_key_exists( 'content', $file ) ) {
