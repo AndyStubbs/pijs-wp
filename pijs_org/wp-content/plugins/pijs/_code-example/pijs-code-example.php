@@ -148,7 +148,9 @@ class Pijs_Code_Example {
 			}
 		}
 		$final .= "<input type='button' $btnClass value='Copy' onclick='copyExample( $this->examples );'>";
-		$final .= "<input type='button' $btnClass value='Playground' onclick='gotoPlayground( $this->examples );'>";
+		if( !$atts[ 'no_run' ] && $atts[ 'lang' ] == 'javascript' ) {
+			$final .= "<input type='button' $btnClass value='Playground' onclick='gotoPlayground( $this->examples );'>";
+		}
 		$this->examples += 1;
 		//error_log( "$content\n", 3, WP_CONTENT_DIR . '/debug.log' );
 

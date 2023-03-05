@@ -489,6 +489,37 @@ function pijs_get_latest_version_url( $fileStart, $fileEnd ) {
 	return $fullPath;
 }
 
+function pijs_get_files_by_version( $fileStart, $fileEnd ) {
+	$directory = ABSPATH . 'files';
+	$versionedFiles = array();
+
+	$files = scandir( $directory );
+	foreach( $files as $file ) {
+		if( strpos( $file, $fileStart ) === 0 && strpos( $file, $fileEnd ) !== false ) {
+			$temp = substr( $file, strlen( $fileStart ) );
+			$temp = substr( $temp, 0, strpos( $temp, $fileEnd ) );
+			$parts = explode( ".", $temp );
+			if( !pijs_is_valid_version( $parts ) ) {
+				continue;
+			}
+			$version = $parts[ 0 ] . "." . $parts[ 1 ] . "." . $parts[ 2 ];
+			$created = date("Y-m-d H:i:s", filectime($directory.'/'.$file));
+			$fullPath = get_site_url() . '/files/' . $file;
+			$versionedFiles[] = array(
+				'version' => $version,
+				'created' => $created,
+				'path' => $fullPath
+			);
+		}
+	}
+
+	usort($versionedFiles, function($a, $b) {
+		return version_compare($b['version'], $a['version']);
+	});
+
+	return $versionedFiles;
+}
+
 function pijs_is_valid_version( $parts ) {
 	if( count( $parts ) !== 3 ) {
 		return false;

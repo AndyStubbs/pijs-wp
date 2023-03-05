@@ -13,6 +13,7 @@ class Pijs_Util {
 
 	function __construct() {
 		add_action( 'wp_loaded', array( $this, 'schedule_cron_jobs' ) );
+		add_shortcode( 'pijs_downloads', array( $this, 'pijs_downloads_shortcode' ) );
 	}
 
 	function schedule_cron_jobs() {
@@ -56,6 +57,42 @@ class Pijs_Util {
 				}
 			}
 		}
+	}
+
+	function pijs_downloads_shortcode() {
+		$filesFull = pijs_get_files_by_version('pi-', '.js');
+		$filesMin = pijs_get_files_by_version('pi-', '.min.js');
+		$filesMap = pijs_get_files_by_version('pi-', '.min.js.map');
+
+		$allFiles = array_merge($filesFull, $filesMin, $filesMap);
+
+		error_log( "ALL FILES:\n" . print_r( $allFiles, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+
+		$groupedFiles = array();
+
+		foreach( $allFiles as $file ) {
+			$version = $file[ 'version' ];
+			if( !isset( $groupedFiles[ $version ] ) ) {
+				$groupedFiles[ $version ] = array();
+			}
+			$groupedFiles[ $version ][ $file[ 'path' ] ] = $file;
+		}
+
+		error_log( "GROUPED FILES:\n" . print_r( $groupedFiles, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+
+		$html = '';
+
+		foreach( $groupedFiles as $version => $files ) {
+			if( !empty( $files ) ) {
+				$created = date( 'Y-m-d', strtotime( reset( $files )[ 'created' ] ) );
+				$html .= "<h2>Version $version ($created)</h2>";
+				foreach( $files as $path => $file ) {
+					$html .= '<li><a href="' . $path . '" download>' . $path . '</a></li>';
+				}
+			}
+		}
+
+		return $html;
 	}
 }
 
