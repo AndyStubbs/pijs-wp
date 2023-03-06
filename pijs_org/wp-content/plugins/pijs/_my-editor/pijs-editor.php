@@ -214,10 +214,10 @@ class Pijs_Editor {
 		if( !isset( $_SESSION[ 'project_id' ] ) ) {
 			$_SESSION[ 'project_id' ] = $this->uniqidReal( 6 );
 			$isNewSession = true;
-			$projectpath = $this->getProjectPath();
-			if( !is_dir( $projectpath ) ) {
-				mkdir( $projectpath, 0777, true );
-			}
+		}
+		$projectpath = $this->getProjectPath();
+		if( !is_dir( $projectpath ) ) {
+			mkdir( $projectpath, 0777, true );
 		}
 		$response = array(
 			'success' => true,
