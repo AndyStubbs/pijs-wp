@@ -44,11 +44,16 @@ class Pijs_Showcase {
 						"clearInterval( tempInterval );\n\t\t\t" .
 					"}\n\t\t" .
 				"}, 30 );\n\t" .
+				"var g_fullscreen = false\n\t;" .
 			"</script>\n";
 		} elseif ( $atts[ 'fullscreen' ] ) {
 			$template .= "<script>" .
 				"var g_fullscreen = true;" .
 				"document.body.style.backgroundColor = 'black';" .
+			"</script>";
+		} else {
+			$template .= "<script>" .
+				"var g_fullscreen = false;" .
 			"</script>";
 		}
 		$template .= $this->get_link_scripts( $showcaseUrl );
