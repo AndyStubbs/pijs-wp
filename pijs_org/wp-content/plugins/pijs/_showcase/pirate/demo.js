@@ -510,30 +510,37 @@
 	function setupGame() {
 		var i, size, isMultiple;
 
-		$.setDefaultInputFocus( "showcase" );
+		if( !g_fullscreen ) {
+			$.setDefaultInputFocus( "showcase" );
+			size = document.getElementById( "showcase" ).getBoundingClientRect();
+		} else {
+			size = { "width": window.innerWidth };
+		}
 		$.setActionKey( "Space" );
 
 		//console.log( "Setting Up Game" );
 
 		isMultiple = true;
-		size = document.getElementById( "showcase" ).getBoundingClientRect();
+
 		if( size.width < 1200 ) {
 			isMultiple = false;
 		}
 
-		$screen1 = $.screen(
-			g_width + "x" + g_height, "showcase", false, true, null, isMultiple
-		);
-
-		// $.setFont( 4 );
-		// $.setColor( 15 );
-		// $.setPos( 1, 1 );
-		// $screen1.print( "Life" );
-		// return;
-
-		$screen2 = $.screen(
-			g_width + "x" + g_height, "showcase", false, true, null, isMultiple
-		);
+		if( g_fullscreen ) {
+			$screen1 = $.screen(
+				g_width + "x" + g_height, null, false, true, null, isMultiple
+			);
+			$screen2 = $.screen(
+				g_width + "x" + g_height, null, false, true, null, isMultiple
+			);
+		} else {
+			$screen1 = $.screen(
+				g_width + "x" + g_height, "showcase", false, true, null, isMultiple
+			);
+			$screen2 = $.screen(
+				g_width + "x" + g_height, "showcase", false, true, null, isMultiple
+			);
+		}
 		resizeImg();
 		window.addEventListener( "resize", resizeImg );
 		toggleTransition();
@@ -570,8 +577,13 @@
 			img.style.height = $screen1.canvas().style.height;
 			img.style.marginLeft = $screen1.canvas().style.marginLeft;
 			img.style.marginTop = $screen1.canvas().style.marginTop;
-			showcase.prepend( img );
+			if( !g_fullscreen ) {
+				showcase.prepend( img );
+			}
 		} );
+		if( g_fullscreen ) {
+			document.querySelector( ".pirate-images" ).style.display = "";
+		}
 		document.getElementById( "bgShip" ).style.display = "block";
 	}
 

@@ -7,29 +7,41 @@
 	g_pausedMessageShown = false;
 	g_continue = showIntro;
 
-	$.setDefaultInputFocus( "showcase" );
-	document.querySelector( "#showcase" ).onblur = function () {
-		g_paused = true;
-		g_pausedMessageShown = false;
-		$.cancelInput();
-		showPauseScreen();
-	};
-	document.querySelector( "#showcase" ).onfocus = function () {
+	if( !g_fullscreen ) {
+		$.setDefaultInputFocus( "showcase" );
+		document.querySelector( "#showcase" ).onblur = function () {
+			g_paused = true;
+			g_pausedMessageShown = false;
+			$.cancelInput();
+			showPauseScreen();
+		};
+		document.querySelector( "#showcase" ).onfocus = function () {
+			g_paused = false;
+			g_pausedMessageShown = false;
+			if( g_continue ) {
+				drawGame();
+				g_continue();
+			}
+		};
+	} else {
 		g_paused = false;
-		g_pausedMessageShown = false;
-		if( g_continue ) {
-			drawGame();
-			g_continue();
-		}
-	};
+	}
+
 	$.setActionKey( "Space" );
 
 	$.ready( function () {
-		$.screen( {
-			"aspect": "300x200",
-			"isMultiple": true,
-			"container": "showcase"
-		} );
+		if( g_fullscreen ) {
+			$.screen( {
+				"aspect": "300x200",
+				"isMultiple": true
+			} );
+		} else {
+			$.screen( {
+				"aspect": "300x200",
+				"isMultiple": true,
+				"container": "showcase"
+			} );
+		}
 		showPauseScreen();
 	} );
 

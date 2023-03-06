@@ -32,25 +32,34 @@ var Menu = ( function () {
 	function initGame() {
 		var i;
 
-		document.querySelector( "#showcase" ).onblur = function () {
-			g[ "paused" ] = true;
-			if( g.continue ) {
-				pauseGame();
-			}
-		};
-		document.querySelector( "#showcase" ).onfocus = function () {
+		if( !g_fullscreen ) {
+			document.querySelector( "#showcase" ).onblur = function () {
+				g[ "paused" ] = true;
+				if( g.continue ) {
+					pauseGame();
+				}
+			};
+			document.querySelector( "#showcase" ).onfocus = function () {
+				g[ "paused" ] = false;
+				if( g.continue ) {
+					g.continue();
+				}
+			};
+			$.setDefaultInputFocus( "showcase" );
+		} else {
 			g[ "paused" ] = false;
-			if( g.continue ) {
-				g.continue();
-			}
-		};
-		$.setDefaultInputFocus( "showcase" );
+		}
 		$.setActionKey( "ArrowUp" );
 		$.setActionKey( "ArrowLeft" );
 		$.setActionKey( "ArrowDown" );
 		$.setActionKey( "ArrowRight" );
 		$.setActionKey( "Space" );
-		g.screens.push( $.screen( "256x224", "showcase" ) );
+		if( g_fullscreen ) {
+			g.screens.push( $.screen( "256x224" ) );
+		} else {
+			g.screens.push( $.screen( "256x224", "showcase" ) );
+		}
+
 		g.screens.push( $.screen( "10x10", null, true ) );
 
 		// Viruses

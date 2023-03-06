@@ -20,7 +20,8 @@ class Pijs_Showcase {
 	function showcase_shortcode( $atts, $content = null ) {
 		$atts = shortcode_atts( array(
 			'demo' => 'platformer',
-			'scrollable' => false
+			'scrollable' => false,
+			'fullscreen' => false
 		), $atts );
 
 		$showcaseName = $atts[ 'demo' ];
@@ -44,6 +45,11 @@ class Pijs_Showcase {
 					"}\n\t\t" .
 				"}, 30 );\n\t" .
 			"</script>\n";
+		} elseif ( $atts[ 'fullscreen' ] ) {
+			$template .= "<script>" .
+				"var g_fullscreen = true;" .
+				"document.body.style.backgroundColor = 'black';" .
+			"</script>";
 		}
 		$template .= $this->get_link_scripts( $showcaseUrl );
 		return $template;

@@ -77,18 +77,22 @@
 	let g_paused = true;
 	let g_pausedMessageShown = false;
 
-	$.setDefaultInputFocus( "showcase" );
-	document.querySelector( "#showcase" ).onblur = function () {
-		g_paused = true;
-		g_pausedMessageShown = false;
-	};
-	document.querySelector( "#showcase" ).onfocus = function () {
+	if( !g_fullscreen ) {
+		$.setDefaultInputFocus( "showcase" );
+		document.querySelector( "#showcase" ).onblur = function () {
+			g_paused = true;
+			g_pausedMessageShown = false;
+		};
+		document.querySelector( "#showcase" ).onfocus = function () {
+			g_paused = false;
+			g_pausedMessageShown = false;
+			requestAnimationFrame( run );
+		};
+		document.querySelector( "#instructions" ).innerHTML = "Instructions: <br />" +
+			"Use left/right arrow keys to move<br />Up to jump<br />Hold shift to run";
+	} else {
 		g_paused = false;
-		g_pausedMessageShown = false;
-		requestAnimationFrame( run );
-	};
-	document.querySelector( "#instructions" ).innerHTML = "Instructions: <br />" +
-		"Use left/right arrow keys to move<br />Up to jump<br />Hold shift to run";
+	}
 	$.setActionKey( "ArrowUp" );
 	$.setActionKey( "ArrowLeft" );
 	$.setActionKey( "ArrowDown" );
@@ -101,7 +105,11 @@
 	$.loadImage( g_showcaseLink + "mountains.png", "mountains" );
 	$.ready( start );
 	function start() {
-		$.screen( "300x200", "showcase" );
+		if( g_fullscreen ) {
+			$.screen( "300x200" );
+		} else {
+			$.screen( "300x200", "showcase" );
+		}
 		g_lastTime = performance.now();
 		run( g_lastTime );
 	}
