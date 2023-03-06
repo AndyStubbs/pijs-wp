@@ -35,9 +35,15 @@ class Pijs_Showcase {
 		}
 
 		if( $atts[ 'scrollable' ] ) {
-			$template .= "<script>" .
-					"setTimeout( function() { document.querySelector('#showcase canvas').style.position = 'static'; }, 100 );" .
-				"</script>";
+			$template .= "<script>\n\t" .
+				"let tempInterval = setInterval( function() {\n\t\t" .
+					"let canvas = document.querySelector( '#showcase canvas' );\n\t\t" .
+					"if( canvas ) {\n\t\t\t" .
+						"canvas.style.position = 'static';\n\t\t\t" .
+						"clearInterval( tempInterval );\n\t\t\t" .
+					"}\n\t\t" .
+				"}, 30 );\n\t" .
+			"</script>\n";
 		}
 		$template .= $this->get_link_scripts( $showcaseUrl );
 		return $template;

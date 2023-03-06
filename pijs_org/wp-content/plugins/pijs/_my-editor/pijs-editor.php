@@ -11,6 +11,8 @@ class Pijs_Editor {
 	private $scripts;
 	private $errors;
 	private $projectfiles;
+	private $debug = false;
+	private $log = '';
 
 	function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
@@ -30,8 +32,6 @@ class Pijs_Editor {
 	}
 
 	function playground_shortcode() {
-		//error_log( 'CODE: ' . print_r( $_POST, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
-		
 		$content = '';
 		if( $this->isSameSite() && isset( $_POST[ 'code' ] ) ) {
 			$code = $_POST[ 'code' ];
@@ -117,21 +117,17 @@ class Pijs_Editor {
 	}
 
 	function register_playground_scripts() {
-		//pijs_get_latest_version_url( 'pi-extra', '.js' )
-		//error_log( 'pi-extra: ' . pijs_get_latest_version_url( 'pi-extra-', '.js' ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		wp_enqueue_style( 'editor-styles' );
 		wp_enqueue_style( 'playground-styles' );
-		wp_enqueue_script( 'pijs-extra', pijs_get_latest_version_url( 'pi-extra-', '.js' ) );
+		wp_enqueue_script( 'pijs-extra', pijs_get_file_url( 'pi-extra.js' ) );
 		wp_enqueue_script( 'monaco-editor' );
 		wp_enqueue_script( 'playground' );
 	}
 
 	function register_editor_scripts() {
-		//pijs_get_latest_version_url( 'pi-extra', '.js' )
-		//error_log( 'pi-extra: ' . pijs_get_latest_version_url( 'pi-extra-', '.js' ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		wp_enqueue_style( 'editor-styles' );
 		wp_enqueue_style( 'page-styles' );
-		wp_enqueue_script( 'pijs-extra', pijs_get_latest_version_url( 'pi-extra-', '.js' ) );
+		wp_enqueue_script( 'pijs-extra', pijs_get_file_url( 'pi-extra.js' ) );
 		wp_enqueue_script( 'filesaver' );
 		wp_enqueue_script( 'jszip-utils' );
 		wp_enqueue_script( 'jszip' );
@@ -166,12 +162,10 @@ class Pijs_Editor {
 			return;
 		}
 		$code = '';
-		//error_log( 'Post: ' . print_r( $_POST[ 'code' ], true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		if( !empty( $_POST[ 'code' ] ) ) {
 			$response[ 'success' ] = true;
 			$code = $_POST['code'];
 			$code = base64_decode( $_POST[ 'code' ] );
-			//error_log( 'Code: ' . $code . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		}
 		if( ! session_id() ) {
 			session_start();
@@ -179,7 +173,6 @@ class Pijs_Editor {
 		if( !isset( $_SESSION[ 'playground_id' ] ) ) {
 			$_SESSION[ 'playground_id' ] = $this->uniqidReal( 6 );
 		}
-		//error_log( 'Post: ' . print_r( $_SESSION, true ) . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		$response[ 'project_id' ] = $_SESSION[ 'playground_id' ];
 		$pijsFile = pijs_get_latest_version_url( 'pi-', '.js' );
 		$code = str_replace( "\n", "\n\t\t\t", $code );
@@ -195,8 +188,6 @@ class Pijs_Editor {
 		$parent_directory = dirname( ABSPATH );
 		$pathname = $parent_directory . '/pijs-run.org/runs/' . $projectId;
 		$filename = $pathname . '/index.php';
-		//error_log( "$template\n", 3, WP_CONTENT_DIR . '/debug.log' );
-		//error_log( "$filename\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		if( ! file_exists( $pathname ) ) {
 			mkdir( $pathname, 0777, true );
 		} else {
@@ -206,6 +197,8 @@ class Pijs_Editor {
 	}
 
 	function editor_run_program() {
+		$this->log = "\n\n**************** " . date("Y-m-d H:i:s") . " ****************\n";
+		$this->log .= "editor_run_program\n";
 		if( !$this->isSameSite() ) {
 			$response = array(
 				'success' => false,
@@ -221,6 +214,10 @@ class Pijs_Editor {
 		if( !isset( $_SESSION[ 'project_id' ] ) ) {
 			$_SESSION[ 'project_id' ] = $this->uniqidReal( 6 );
 			$isNewSession = true;
+			$projectpath = $this->getProjectPath();
+			if( !is_dir( $projectpath ) ) {
+				mkdir( $projectpath, 0777, true );
+			}
 		}
 		$response = array(
 			'success' => true,
@@ -228,25 +225,8 @@ class Pijs_Editor {
 			'needsRefresh' => false
 		);
 		$isFullProject = filter_var( $_POST[ 'isFullProject' ], FILTER_VALIDATE_BOOLEAN );
-		$doesProjectExist = file_exists( $this->getProjectPath() );
 
-		/*
-		if( !$isFullProject ) {
-			error_log( 'IS NOT FULL PROJECT' . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
-		}
-		if( !$doesProjectExist ) {
-			error_log( 'PROJECT FILES DO NOT EXIST' . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
-		}
-		if( $isNewSession ) {
-			error_log( 'IS A NEW SESSION' . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
-		}
-		*/
-
-		if(
-			!$isFullProject &&
-			( !$doesProjectExist || $isNewSession )
-		) {
-			//error_log( 'NEEDS REFRESH' . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		if( !$isFullProject && $isNewSession ) {
 			$response[ 'needsRefresh' ] = true;
 			$response[ 'success' ] = false;
 			wp_send_json( $response );
@@ -256,6 +236,10 @@ class Pijs_Editor {
 		$this->scripts = "<script src='$pijsFile'></script>";
 		$this->buildFiles( $_POST[ 'files' ], '' );
 		$this->build_template( htmlentities( $_POST[ 'title' ] ), $this->scripts, $_SESSION[ 'project_id' ] );
+
+		if( $this->debug ) {
+			error_log( sprintf( '[%s] [DEBUG] %s in %s:%d', date( 'Y-m-d H:i:s' ), $this->log, __FILE__, __LINE__ ) );
+		}
 		wp_send_json( $response );
 	}
 
@@ -265,21 +249,18 @@ class Pijs_Editor {
 	}
 
 	function buildFiles( $file, $path ) {
-		//error_log( 'Build File: ' . $file[ 'name' ] . "\n", 3, WP_CONTENT_DIR . '/debug.log' );
+		$this->log .= 'Build File: ' . $file[ 'name' ] . "\n";
 		$projectpath = $this->getProjectPath();
 		$name = preg_replace( '/[^a-zA-Z0-9_ \-\.]/', '', $file[ 'name' ] );
 		if( $file[ 'type' ] === 'folder' ) {
-			//error_log( "FILE IS FOLDER\n", 3, WP_CONTENT_DIR . '/debug.log' );
 			if( $path . '/' . $name !== '/root' ) {
 				$newpath = $path . '/' . $name;
-				//echo 'Making dir: ' . $projectpath . $newpath . "-- \n";
 				if( !file_exists( $projectpath . $newpath ) ) {
 					mkdir( $projectpath . $newpath, 0777, true );
 				} else {
 					touch( $projectpath. $newpath );
 				}
 			} else {
-				//echo 'Skipping root dir: ' . $path . "-- \n";
 				$newpath = $path;
 			}
 			if( array_key_exists( 'content', $file ) ) {
@@ -287,12 +268,13 @@ class Pijs_Editor {
 					$this->buildFiles( $subFile, $newpath );
 				}
 			} else {
-				//logText( print_r( $file, true ) );
+				$this->log .= 'Folder has no content';
 			}
 		} else {
 			if( $file[ 'type' ] === 'javascript' ) {
+				$this->log .= "File is javascript file.\n";
 				if( $path !== '' ) {
-					$filename = $path . '/' . $name . '.js';	
+					$filename = $path . '/' . $name . '.js';
 				} else {
 					$filename = $name . '.js';
 				}
@@ -304,10 +286,24 @@ class Pijs_Editor {
 				if( !isset( $_SESSION[ $fvname ] ) ) {
 					$_SESSION[ $fvname ] = 0;
 				}
+				$this->log .= "File path: $filepath\n";
 				if( array_key_exists( 'content', $file ) ) {
-					file_put_contents( $filepath, base64_decode( $file[ 'content' ] ) );
+					$this->log .= 'File contents found\n';
+					$result = file_put_contents( $filepath, base64_decode( $file[ 'content' ] ) );
+					if( $result === false ) {
+						$this->debug = true;
+						$this->log .= "\n** Failed writing contents! **\n\n";
+						$error = error_get_last();
+						$this->log .= "Message: " . $error[ 'message' ] . "\n";
+						$this->log .= "File: " . $error[ 'file' ] . "\n";
+						$this->log .= "Line: " . $error[ 'line' ] . "\n\n";
+						$this->log .= print_r( $error, true );
+					} else {
+						$this->log .= 'File contents written' . "\n";
+					}
 					$_SESSION[ $fvname ] += 1;
 				} else {
+					$this->log .= "File contents not included.\n";
 					touch( $filepath );
 				}
 				$fileversion = $_SESSION[ $fvname ];
@@ -331,18 +327,10 @@ class Pijs_Editor {
 	}
 
 	function convertToImage( $content, $filename ) {
-		//error_log( "Convert to Image: $filename\n", 3, WP_CONTENT_DIR . '/debug.log' );
-		//error_log( "**********************\n\n$content\n\n*********************\n\n", 3, WP_CONTENT_DIR . '/debug.log' );
 		$start = strpos( $content, 'data:' ) + 5;
 		$end = strpos( $content, ';', $start );
 		$imageType = substr( $content, $start, $end - $start );
 		$b64 = substr( $content, strpos( $content, 'base64,' ) + 7 );
-
-		//echo $filename;
-		//echo " -- \n";
-		//echo $imageType;
-		//echo " -- \n";
-		//echo $b64;
 
 		// Obtain the original content (usually binary data)
 		$bin = base64_decode( $b64 );

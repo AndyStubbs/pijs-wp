@@ -70,7 +70,7 @@ class Pijs_Code_Example {
 		wp_enqueue_style( 'highlight-styles' );
 		wp_enqueue_style( 'example-styles' );
 		wp_enqueue_style( 'help-styles' );
-		wp_enqueue_script( 'pi-examples', pijs_get_latest_version_url( 'pi-examples-', '.js' ) );
+		wp_enqueue_script( 'pi-examples', pijs_get_file_url( 'pi-examples.js' ) );
 		wp_enqueue_script( 'pijs', pijs_get_latest_version_url( 'pi-', '.js' ) );
 		wp_enqueue_script( 'highlight-pack' );
 		wp_enqueue_script( 'examples' );
@@ -126,6 +126,8 @@ class Pijs_Code_Example {
 			'no_run' => false,
 			'on_close' => ''
 		), $atts );
+		$content = preg_replace( '/<p[^>]*>/i', '', $content );
+		$content = preg_replace( '/<\/p[^>]*>/i', '', $content );
 		$content = preg_replace( '/<br[^>]*>/i', '', $content );
 		$content = str_replace( '&#215;', 'x', $content );
 		$content = str_replace( '&times;', 'x', $content );
@@ -146,6 +148,8 @@ class Pijs_Code_Example {
 			if( $this->isFirst ) {
 				$this->isFirst = false;
 			}
+		} else {
+			$this->exampleCode .= "/**** Example $this->examples ****/\nexamples.push( function() { } );\n";
 		}
 		$final .= "<input type='button' $btnClass value='Copy' onclick='copyExample( $this->examples );'>";
 		if( !$atts[ 'no_run' ] && $atts[ 'lang' ] == 'javascript' ) {
@@ -166,7 +170,7 @@ class Pijs_Code_Example {
 
 	function get_link_scripts() {
 		return "<script>" .
-			"var g_helpFile = '" . pijs_get_latest_version_url( 'pi-help-', '.json' ) . "';" .
+			"var g_helpFile = '" . pijs_get_file_url( 'pi-help.json' ) . "';" .
 			"var g_playgroundLink = '" . get_site_url() . "/apps/playground';" .
 		"</script>";
 	}

@@ -5,7 +5,7 @@
 * Copyright Andy Stubbs
 * Released under the Apache License 2.0
 * https://www.apache.org/licenses/LICENSE-2.0
-* Date: 2023-03-04
+* Date: 2023-03-05
 * @preserve
 */
 
@@ -419,7 +419,6 @@ window.pi = ( function () {
 			element.tabIndex = 0;
 		}
 		m_piData.defaultInputFocus = element;
-		m_piData.commands[ "reinitGamepads" ]();
 		m_piData.commands[ "reinitKeyboard" ]();
 	}
 
@@ -2323,8 +2322,7 @@ function setInputCursor( screenData, args ) {
 "use strict";
 
 var m_piData, m_controllers, m_controllerArr, m_events, m_gamepadLoopId,
-	m_Modes, m_isLooping, m_loopInterval, m_axesSensitivity, pi, m_inputFocus,
-	m_init;
+	m_Modes, m_isLooping, m_loopInterval, m_axesSensitivity, pi, m_init;
 
 pi = window.pi;
 m_piData = pi._.data;
@@ -2351,24 +2349,10 @@ m_isLooping = false;
 m_loopInterval = 8;
 m_axesSensitivity = 0.2;
 m_init = false;
-m_inputFocus = null;
-
-
-pi._.addCommand( "reinitGamepads", reinitGamepads, true, false, [], false );
-function reinitGamepads() {
-	if( m_init ) {
-		if( m_inputFocus ) {
-			m_inputFocus.removeEventListener( "gamepadconnected", gamepadConnected );
-			m_inputFocus.removeEventListener( "gamepaddisconnected", gamepadDisconnected );
-		}
-		initGamepads();
-	}
-}
 
 function initGamepads() {
-	m_inputFocus = m_piData.defaultInputFocus;
-	m_inputFocus.addEventListener( "gamepadconnected", gamepadConnected );
-	m_inputFocus.addEventListener( "gamepaddisconnected", gamepadDisconnected );
+	window.addEventListener( "gamepadconnected", gamepadConnected );
+	window.addEventListener( "gamepaddisconnected", gamepadDisconnected );
 	m_init = true;
 }
 

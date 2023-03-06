@@ -4,6 +4,8 @@ function runExample( index ) {
 	document.body.style.overflow = "hidden";
 	document.getElementById( "exampleBox" ).style.display = "block";
 	document.getElementById( "clearFocus" ).focus();
+	$.setDefaultInputFocus( "canvasContainer" );
+	document.getElementById( "canvasContainer" ).focus();
 	examples[ index ]();
 }
 
@@ -27,6 +29,7 @@ function gotoPlayground( index ) {
 }
 
 function closeExample() {
+	$.cancelInput();
 	$.removeAllScreens();
 	$.clearKeys();
 	document.getElementById( "exampleBox" ).style.display = "none";

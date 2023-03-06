@@ -457,6 +457,11 @@ function display_blank_page( $template ) {
 }
 add_filter( 'template_include', 'display_blank_page' );
 
+function pijs_get_file_url( $filename ) {
+	$directory = ABSPATH . 'files';
+	return get_site_url() . '/files/' . $filename;
+}
+
 function pijs_get_latest_version_url( $fileStart, $fileEnd ) {
 	$directory = ABSPATH . 'files';
 	//error_log( "$directory\n", 3, WP_CONTENT_DIR . '/debug.log' );
@@ -531,3 +536,5 @@ function pijs_is_valid_version( $parts ) {
 	}
 	return true;
 }
+
+remove_filter( 'the_content', 'wptexturize' );
