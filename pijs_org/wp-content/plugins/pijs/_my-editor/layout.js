@@ -275,15 +275,20 @@ var g_layout = ( function ( $ ) {
 			element.classList.add( "menu-item" );
 			element.innerText = item.name;
 			element.dataset.index = i;
-			element.addEventListener( "mousedown", openSubMenu );
 			menuContainer.appendChild( element );
 
-			for( let j = 0; j < item.subItems.length; j++ ) {
-				if( item.subItems[ j ].keybindingsLocal ) {
-					m_keys[ item.subItems[ j ].keybindingsLocal.key ] = item.subItems[ j ];
-				}
-				if( item.subItems[ j ].keybindingsMonaco ) {
-					g_editor.addCommand( item.subItems[ j ].name, item.subItems[ j ].command, item.subItems[ j ].keybindingsMonaco );
+			if( item.subItems.length === 1 ) {
+				element.addEventListener( "mousedown", item.subItems[ 0 ].command );
+				element.title = item.subItems[ 0 ].title;
+			} else {
+				element.addEventListener( "mousedown", openSubMenu );
+				for( let j = 0; j < item.subItems.length; j++ ) {
+					if( item.subItems[ j ].keybindingsLocal ) {
+						m_keys[ item.subItems[ j ].keybindingsLocal.key ] = item.subItems[ j ];
+					}
+					if( item.subItems[ j ].keybindingsMonaco ) {
+						g_editor.addCommand( item.subItems[ j ].name, item.subItems[ j ].command, item.subItems[ j ].keybindingsMonaco );
+					}
 				}
 			}
 		}

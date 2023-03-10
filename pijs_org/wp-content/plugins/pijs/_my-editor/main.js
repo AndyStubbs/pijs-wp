@@ -52,7 +52,8 @@ var g_main = ( function ( $ ) {
 
 	let m_lastFileClicked;
 	let m_menuItems = {
-		"File": []
+		"File": [],
+		"Run": []
 	};
 	let m_tabsElement = null;
 	let m_zipFileUploads = null;
@@ -174,6 +175,10 @@ var g_main = ( function ( $ ) {
 		addMenuItem(
 			"File", "Delete file", "Delete a file from your project.", "DEL", { "key": "DELETE", "ctrlKey": false },
 			null, deleteSelectedFiles
+		);
+		addMenuItem(
+			"Run", "Run", "Uploads your files and runs in a seperate window.", "Ctrl+R", { "key": "R", "ctrlKey": true },
+			[ monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyR ], function () { runProgram( false, true ); }
 		);
 		let menuArray = [];
 		for( let name in m_menuItems ) {
