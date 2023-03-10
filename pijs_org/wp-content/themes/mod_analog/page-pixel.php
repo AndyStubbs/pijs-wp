@@ -550,5 +550,7 @@ Template Name: Pixel Editor
 			<input class="buttonOption" type="button" value="Dither" id="effectsDither" />
 		</div>
 	</div>
+	<!-- Footer Content -->
+	<?php wp_footer(); ?>
 </body>
 </html>
