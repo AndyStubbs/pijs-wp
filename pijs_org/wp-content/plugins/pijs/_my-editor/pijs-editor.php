@@ -13,6 +13,7 @@ class Pijs_Editor {
 	private $projectfiles;
 	private $debug = false;
 	private $log = '';
+	private $needsRefresh = false;
 
 	function __construct() {
 		add_action( 'wp_enqueue_scripts', array( $this, 'register_scripts' ) );
@@ -235,6 +236,14 @@ class Pijs_Editor {
 		$pijsFile = pijs_get_latest_version_url( 'pi-', '.js' );
 		$this->scripts = "<script src='$pijsFile'></script>";
 		$this->buildFiles( $_POST[ 'files' ], '' );
+
+		// Check if we need to refresh the project because a file is missing
+		if( $this->needsRefresh ) {
+			$response[ 'needsRefresh' ] = true;
+			$response[ 'success' ] = false;
+			wp_send_json( $response );
+			return;
+		}
 		$this->build_template( htmlentities( $_POST[ 'title' ] ), $this->scripts, $_SESSION[ 'project_id' ] );
 
 		if( $this->debug ) {
@@ -305,6 +314,12 @@ class Pijs_Editor {
 				} else {
 					$this->log .= "File contents not included.\n";
 					touch( $filepath );
+					if( file_exists( $filepath ) ) {
+						touch( $filepath );
+					} else {
+						$this->needsRefresh = true;
+						return;
+					}
 				}
 				$fileversion = $_SESSION[ $fvname ];
 				$this->scripts .= "\n\t\t" . '<script src="' . $filename . "?v=$fileversion" . '"></script>';
@@ -313,14 +328,24 @@ class Pijs_Editor {
 				if( array_key_exists( 'content', $file ) ) {
 					$this->convertToImage( $file[ 'content' ], $filepath );
 				} else {
-					touch( $filepath . $file[ 'extension' ] );
+					if( file_exists( $filepath . $file[ 'extension' ] ) ) {
+						touch( $filepath . $file[ 'extension' ] );
+					} else {
+						$this->needsRefresh = true;
+						return;
+					}
 				}
 			} elseif ( $file[ 'type' ] === 'audio' ) {
 				$filepath = $projectpath . $path . '/' . $name;
 				if( array_key_exists( 'content', $file ) ) {
 					$this->convertToAudio( $file[ 'content' ], $filepath );
 				} else {
-					touch( $filepath . $file[ 'extension' ] );
+					if( file_exists( $filepath . $file[ 'extension' ] ) ) {
+						touch( $filepath . $file[ 'extension' ] );
+					} else {
+						$this->needsRefresh = true;
+						return;
+					}
 				}
 			}
 		}
