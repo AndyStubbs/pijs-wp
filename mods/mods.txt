@@ -1,0 +1,24 @@
+********************************************************************
+/wp-content/plugins/burst-statistics/statistics/class-statistics.php
+change line: 22
+burst_url . "helpers/timeme/timeme.js", array(),
+
+********************************************************************
+/wp-content/plugins/burst-statistics/helpers/timeme/timeme.js
+replace lines:20-31
+	if (typeof module !== 'undefined' && module.exports) {
+            // CommonJS
+            return module.exports = factory();
+        } else if (typeof define === 'function' && define.amd) {
+            // AMD
+            define([], () => {
+                return (root.TimeMe = factory());
+            });
+        } else {
+            // Global Variables
+            return root.TimeMe = factory();
+        }
+
+with:
+            // Global Variables
+            return root.TimeMe = factory();

@@ -34,6 +34,7 @@ wp-config.php
 /wp-content/plugins/*.php
 /wp-content/plugins/*.zip
 /wp-content/plugins/advanced-database-cleaner
+/wp-content/plugins/burst-statistics
 
 # Uploads
 /wp-content/uploads/
