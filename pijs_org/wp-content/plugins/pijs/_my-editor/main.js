@@ -61,6 +61,7 @@ var g_main = ( function ( $ ) {
 	let m_models = {};
 	let m_clickedOnRootFolder = null;
 	let m_reRuns = 0;
+	let m_freespaceTimeout = null;
 
 	return {
 		"init": init,
@@ -559,7 +560,10 @@ var g_main = ( function ( $ ) {
 			if( !m_models[ file.id ] ) {
 				m_models[ file.id ] = g_editor.createModel( g_file.getFileContentById( file.id ), file.type );
 				m_models[ file.id ].onDidChangeContent( function () {
-					g_file.setFileContent( file.id, m_models[ file.id ].getValue() );
+					g_file.setFileContent( file.id, m_models[ file.id ].getValue(), function () {
+						g_util.delay( refreshFileView, "refreshFileView", 100 );
+						updateFreespace();
+					} );
 				} );
 			}
 			g_editor.setModel( m_models[ file.id ] );
@@ -763,7 +767,7 @@ var g_main = ( function ( $ ) {
 	function deleteSelectedFiles() {
 		let selectedFiles = getSelectedFiles();
 		for( let i = 0; i < selectedFiles.length; i++ ) {
-			g_file.deleteFile( selectedFiles[ i ].fullpath );
+			g_file.deleteFile( selectedFiles[ i ].fullpath, updateFreespace );
 		}
 		if( selectedFiles.length > 0 ) {
 			m_lastFileClicked = null;
@@ -783,7 +787,6 @@ var g_main = ( function ( $ ) {
 			let file = g_file.getFileById( $selectedTab.get( 0 ).dataset.fileId );
 			highlightSelectedFile( file );
 		}
-
 		//resize();
 	}
 
@@ -1281,8 +1284,8 @@ var g_main = ( function ( $ ) {
 		let searchForFile = g_file.getFileByFullpath( filePath );
 		let index = 0;
 		while( searchForFile ) {
-			name = getUpdatedName( name, ++index );
-			fullname = name + extension;
+			let tempName = getUpdatedName( name, ++index );
+			fullname = tempName + extension;
 			filePath = folderPath + "/" + fullname;
 			searchForFile = g_file.getFileByFullpath( filePath );
 		}
@@ -1293,9 +1296,9 @@ var g_main = ( function ( $ ) {
 			"extension": extension
 		};
 		if( parent.path === "" ) {
-			g_file.createFile( newFile, g_file.ROOT_NAME, content );
+			g_file.createFile( newFile, g_file.ROOT_NAME, content, updateFreespace );
 		} else {
-			g_file.createFile( newFile, parent.path + "/" + parent.fullname, content );
+			g_file.createFile( newFile, parent.path + "/" + parent.fullname, content, updateFreespace );
 		}
 		refreshFileView();
 	}
@@ -1523,18 +1526,14 @@ var g_main = ( function ( $ ) {
 	}
 
 	function updateFreespace() {
-		let $fileSizeRemaining = $( ".file-size-remaining" );
-
-		//if( m_failedLastSave ) {
-		//	$fileSizeRemaining.text( "OVER" );
-		//	$fileSizeRemaining.addClass( "msg-error" );
-		//} else {
+		clearTimeout( m_freespaceTimeout );
+		m_freespaceTimeout = setTimeout( function () {
+			let $fileSizeRemaining = $( ".file-size-remaining" );
 			let freespace = g_file.getFileStorageSize();
 			$fileSizeRemaining.text( g_util.getMbKb( freespace ) )
 				.attr( "title", g_util.getMbKb( freespace ) + " of " +
 				g_util.getMbKb( MAX_FILE_STORAGE_SIZE ) + " storage used." );
-		//	$fileSizeRemaining.removeClass( "msg-error" );
-		//}
+		}, 100 );
 	}
 
 	function getShortName( name ) {

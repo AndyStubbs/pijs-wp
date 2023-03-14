@@ -125,10 +125,10 @@ var g_file = ( function () {
 		return "file_" + m_project.id + "_" + fileId;
 	}
 
-	function setFileContent( id, content ) {
+	function setFileContent( id, content, callback ) {
 		m_filesContent[ id ] = content;
 		getFileById( id ).isChanged = true;
-		saveFile( id, content );
+		saveFile( id, content, callback );
 		if( getFileById( id ).type !== FILE_TYPE_FOLDER ) {
 			setFileData( id, "size", g_util.getByteSize( content ) );
 		}
@@ -144,24 +144,24 @@ var g_file = ( function () {
 		saveProject();
 	}
 
-	function addFileToFolder( folderId, fileId ) {
+	function addFileToFolder( folderId, fileId, callback ) {
 		let folder = getFileById( folderId );
 		
 		if( folder.type === FILE_TYPE_FOLDER ) {
 			let folderContent = getFileContentById( folderId );
 			folderContent.push( fileId );
-			saveFile( folderId, folderContent );
+			saveFile( folderId, folderContent, callback );
 			m_project.fileLookup[ getFileById( fileId ).fullpath ] = fileId;
 		}
 	}
 
-	function removeFileFromFolder( folderId, fileId ) {
+	function removeFileFromFolder( folderId, fileId, callback ) {
 		let folder = getFileById( folderId );
 		if( folder.type === FILE_TYPE_FOLDER ) {
 			let folderContent = getFileContentById( folderId );
 			folderContent.splice( folderContent.indexOf( fileId ), 1 );
 			delete m_project.fileLookup[ getFileById( fileId ).fullpath ];
-			saveFile( folderId, folderContent );
+			saveFile( folderId, folderContent, callback );
 		}
 	}
 
@@ -195,7 +195,7 @@ var g_file = ( function () {
 		};
 	}
 
-	function createFile( file, path, content ) {
+	function createFile( file, path, content, callback ) {
 		let fileId = ( ++m_project.lastFileId ) + "";
 		file.id = fileId;
 		file.path = path;
@@ -215,7 +215,7 @@ var g_file = ( function () {
 		addFileToFolder( getFileByFullpath( file.path ).id, fileId );
 
 		// Save file and project
-		saveFile( file.id, content );
+		saveFile( file.id, content, callback );
 		saveProject();
 	}
 
@@ -270,7 +270,7 @@ var g_file = ( function () {
 		return fileData;
 	}
 
-	function deleteFile( path ) {
+	function deleteFile( path, callback ) {
 		let file = getFileByFullpath( path );
 		if( !file ) {
 			return false;
@@ -282,7 +282,7 @@ var g_file = ( function () {
 		if( file.type === FILE_TYPE_FOLDER ) {
 			let tempFolder = getFilesFromFolder( file.id );
 			for( let i = 0; i < tempFolder.length; i++ ) {
-				deleteFile( tempFolder[ i ].fullpath );
+				deleteFile( tempFolder[ i ].fullpath, callback );
 			}
 		}
 
@@ -290,12 +290,18 @@ var g_file = ( function () {
 		g_main.closeEditorModel( file );
 
 		// Delete the file
-		removeFileFromFolder( parent.id, file.id );
+		removeFileFromFolder( parent.id, file.id, callback );
 		delete m_project.files[ file.id ];
 		delete m_project.fileLookup[ file.fullpath ];
+		delete m_filesContent[ file.id ];
 
 		// Remove save file and save project
-		g_myIndexDB.removeItem( getFileStoreName( file.id ) );
+		let promise = g_myIndexDB.removeItem( getFileStoreName( file.id ) );
+		promise.then( function () {
+			if( typeof callback === "function" ) {
+				callback();
+			}
+		} );
 		saveProject();
 	}
 
@@ -376,8 +382,13 @@ var g_file = ( function () {
 		}
 	}
 
-	function saveFile( id, content ) {
-		g_myIndexDB.setItem( getFileStoreName( id ), content );
+	function saveFile( id, content, callback ) {
+		let promise = g_myIndexDB.setItem( getFileStoreName( id ), content );
+		promise.then( function () {
+			if( typeof callback === "function" ) {
+				callback();
+			}
+		} );
 	}
 
 	function saveProject() {

@@ -2,13 +2,15 @@
 let g_util = ( function () {
 	const MB_SIZE = 1048576;
 	const KB_SIZE = 1024;
+	let delayTimeouts = {};
 
 	return {
 		"getClickableTarget": getClickableTarget,
 		"selectItem": selectItem,
 		"formatAMPM": formatAMPM,
 		"getMbKb": getMbKb,
-		"getByteSize": getByteSize
+		"getByteSize": getByteSize,
+		"delay": delay
 	};
 
 	// Make sure we are clicking on a file or folder
@@ -52,6 +54,11 @@ let g_util = ( function () {
 
 	function getByteSize( str ) {
 		return new Blob( [ str ] ).size;
+	}
+
+	function delay( cmd, name, amount ) {
+		clearTimeout( delayTimeouts[ name ] );
+		delayTimeouts[ name ] = setTimeout( cmd, amount );
 	}
 
 } )();
