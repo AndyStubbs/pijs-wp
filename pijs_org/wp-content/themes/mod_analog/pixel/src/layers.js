@@ -518,7 +518,7 @@ var layerScript = ( function () {
 
 		// Create screen
 		layerImage = layerDiv.querySelector( ".layer-image" );
-		$screen = $.screen( picture.sdim, layerImage );
+		$screen = $.screen( picture.sdim, layerImage, false, true );
 		$screen.canvas().className = optionsTool.getBackground();
 
 		// Create the layer

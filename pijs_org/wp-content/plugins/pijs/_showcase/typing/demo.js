@@ -3,17 +3,17 @@
 	var g_speed, g_score, g_pos, g_letters, g_letter, g_volume, g_move, g_paused, g_pausedMessageShown, g_continue;
 
 	g_volume = 0.25;
-	g_paused = true;
+	g_paused = false;
 	g_pausedMessageShown = false;
 	g_continue = showIntro;
 
 	if( !g_fullscreen ) {
 		$.setDefaultInputFocus( "showcase" );
 		document.querySelector( "#showcase" ).onblur = function () {
-			g_paused = true;
+			//g_paused = true;
 			g_pausedMessageShown = false;
 			$.cancelInput();
-			showPauseScreen();
+			//showPauseScreen();
 		};
 		document.querySelector( "#showcase" ).onfocus = function () {
 			g_paused = false;
@@ -42,7 +42,8 @@
 				"container": "showcase"
 			} );
 		}
-		showPauseScreen();
+		showIntro();
+		//showPauseScreen();
 	} );
 
 	function showPauseScreen() {

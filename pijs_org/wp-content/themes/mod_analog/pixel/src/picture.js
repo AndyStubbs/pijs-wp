@@ -155,13 +155,15 @@ var pictureScript = ( function () {
 		if( isOffscreen ) {
 			$screen = $.screen( {
 				"aspect": sdim,
-				"isOffscreen": true
+				"isOffscreen": true,
+				"willReadFrequently": true
 			} );
 		} else {
 			$screen = $.screen( {
 				"aspect": sdim,
 				"container": "screen",
-				"isOffscreen": false
+				"isOffscreen": false,
+				"willReadFrequently": true
 			} );
 			$screen.canvas().className = optionsTool.getBackground();
 			$screen.setEnableContextMenu( false );
@@ -179,7 +181,7 @@ var pictureScript = ( function () {
 		previewDiv.dataset.pictureIndex = pictureIndex;
 		previewDiv.addEventListener( "click", previewScreenClick );
 		document.getElementById( "preview" ).appendChild( previewDiv );
-		$screen = $.screen( sdim, previewDiv );
+		$screen = $.screen( sdim, previewDiv, false, true );
 		$screen.canvas().className = optionsTool.getBackground();
 		pixel.selectItem(
 			previewDiv, "selected-tool", "#preview .selected-tool"

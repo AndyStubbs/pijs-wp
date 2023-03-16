@@ -720,17 +720,6 @@ var controlsScript = ( function () {
 					.innerHTML = data.pictures.length;
 				document.getElementById( "loadImagePicturesTitle" )
 					.innerHTML = "Pictures:";
-				/*createTempWorkspace( data.pictures, function ( pictures ) {
-					let canvas = createSpriteSheet( pictures, 5, false, false );
-					if( m_$lastView == null ) {
-						m_$lastView = $.screen(
-							canvas.width + "x" + canvas.height,
-							document.getElementById( "workspacePreview" )
-						);
-					}
-					m_$lastView.drawImage( canvas, 0, 0, 0, 0, 0, layer.alpha );
-				} );*/
-
 			} else if( data.type === "layers" ) {
 				workspacePreview.innerHTML = "";
 				document.getElementById( "loadImageType" )
@@ -880,7 +869,7 @@ var controlsScript = ( function () {
 			tempSpriteData = m_spriteData;
 		}
 		m_$lastView.cls();
-		m_$lastView.drawImage( m_lastCanvas );
+		m_$lastView.drawImage( m_lastCanvas, 0, 0 );
 		$temp = $.screen( m_$lastView.width() + "x" + m_$lastView.height(), null, true, true );
 
 		// Draw outer white semi-transparent rectangle
@@ -916,7 +905,7 @@ var controlsScript = ( function () {
 	function removeSpriteSheetGrid() {
 		if( m_$lastView ) {
 			m_$lastView.cls();
-			m_$lastView.drawImage( m_lastCanvas );
+			m_$lastView.drawImage( m_lastCanvas, 0, 0 );
 		}
 	}
 
@@ -1357,7 +1346,6 @@ var controlsScript = ( function () {
 	function copyPictureButtonClicked() {
 		var original = pixel.activePicture;
 		pictureScript.createNewPicture( original.width, original.height );
-		//pixel.activePicture.$temp.drawImage( original.$temp );
 		layerScript.copyLayers( original );
 		layerScript.refreshTemp();
 		layerScript.drawLayers();
