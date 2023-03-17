@@ -360,36 +360,28 @@ class Pijs_Editor {
 		// Obtain the original content (usually binary data)
 		$bin = base64_decode( $b64 );
 
-		ob_start();
-
-		// Load GD resource from binary data
-		$im = imageCreateFromString( $bin );
-
-		ob_end_clean();
-
-		// Make sure that the GD library was able to load the image
-		// This is important, because you should not miss corrupted or unsupported images
-		if ( !$im ) {
-			return;
-		}
+		$status = true;
 		switch( $imageType ) {
 			case 'image/bmp':
-				imagebmp( $im, $filename . '.bmp' );
+				file_put_contents( $filename . '.bmp', $bin );
 				break;
 			case 'image/gif':
-				imagegif( $im, $filename . '.gif' );
+				file_put_contents( $filename . '.gif', $bin );
 				break;
 			case 'image/jpeg':
-				imagejpg( $im, $filename . '.jpg' );
+				file_put_contents( $filename . '.jpg', $bin );
 				break;
 			case 'image/png':
-				imagepng( $im, $filename . '.png' );
+				file_put_contents( $filename . '.png', $bin );
 				break;
 			case 'image/webp':
-				imagewebp( $im, $filename . '.webp' );
+				file_put_contents( $filename . '.webp', $bin );
 				break;
-			default: return false;
+			default:
+				$status = false;
 		}
+		imagedestroy( $im );
+		return $status;
 	}
 
 	function convertToAudio( $content, $filename ) {
