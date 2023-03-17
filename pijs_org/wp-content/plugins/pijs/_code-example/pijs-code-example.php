@@ -18,16 +18,14 @@ class Pijs_Code_Example {
 	}
 
 	function register_scripts() {
-		if( is_page() ) {
-			$content = get_post()->post_content;
-			if( has_shortcode( $content, $this->example_shortcode_name ) ) {
-				$this->register_common_scripts();
-				return $this->register_example_shortcode_scripts();
-			}
-			if( has_shortcode( $content, $this->help_page_shortcode_name ) ) {
-				$this->register_common_scripts();
-				return $this->register_help_shortcode_scripts();
-			}
+		$content = get_post()->post_content;
+		if( has_shortcode( $content, $this->example_shortcode_name ) ) {
+			$this->register_common_scripts();
+			return $this->register_example_shortcode_scripts();
+		}
+		if( has_shortcode( $content, $this->help_page_shortcode_name ) ) {
+			$this->register_common_scripts();
+			return $this->register_help_shortcode_scripts();
 		}
 	}
 
@@ -127,8 +125,9 @@ class Pijs_Code_Example {
 			'on_close' => ''
 		), $atts );
 		$content = preg_replace( '/<p[^>]*>/i', '', $content );
-		$content = preg_replace( '/<\/p[^>]*>/i', '', $content );
-		$content = preg_replace( '/<br[^>]*>/i', '', $content );
+		$content = preg_replace( '/<\/p[^>]*>/i', "", $content );
+		$content = preg_replace( '/<br[^>]*>/i', "", $content );
+		//$content = str_replace( "\n\n", "\n", $content );
 		$content = str_replace( '&#215;', 'x', $content );
 		$content = str_replace( '&times;', 'x', $content );
 		//$this->findNonAsciiChars( $content );
