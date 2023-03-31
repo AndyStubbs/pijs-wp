@@ -30,7 +30,9 @@ var g_file = ( function () {
 		"setFileContent": setFileContent,
 		"setProjectSettings": setProjectSettings,
 		"resetFilesChanged": resetFilesChanged,
-		"moveFile": moveFile
+		"moveFile": moveFile,
+		"renameFile": renameFile,
+		"restoreLastDeletedFile": restoreLastDeletedFile
 	};
 
 	function getUniqueId() {
@@ -59,7 +61,8 @@ var g_file = ( function () {
 				}
 			},
 			"fileLookup": {},
-			"tabs": [ { "fileId": "1", "isSelected": true } ]
+			"tabs": [ { "fileId": "1", "isSelected": true } ],
+			"lastDeletedFile": null
 		};
 		m_project.fileLookup[ ROOT_NAME ] = "0";
 		setFileContent( "0", [] );
@@ -98,6 +101,7 @@ var g_file = ( function () {
 						}
 						filesLoaded += 1;
 						if( filesLoaded === fileCount ) {
+							auditFiles();
 							// Load complete
 							onReady();
 						}
@@ -107,6 +111,24 @@ var g_file = ( function () {
 			initBlankProject();
 			onReady();
 		}
+	}
+
+	function auditFiles() {
+		Object.entries( m_project.files ).forEach( entry => {
+			let fileId = entry[ 0 ];
+			let files = getFilesFromFolder( fileId );
+			if( files ) {
+				let filesToRemove = [];
+				for( let i = 0; i < files.length; i++ ) {
+					if( !m_filesContent[ files[ i ].id ] ) {
+						filesToRemove.push( fileId );
+					}
+				}
+				for( let i = 0; i < filesToRemove.length; i++ ) {
+					removeFileFromFolder( fileId, filesToRemove[ i ] );
+				}
+			}
+		} );
 	}
 
 	function getFileById( id ) {
@@ -289,6 +311,12 @@ var g_file = ( function () {
 		// Clean up editor
 		g_main.closeEditorModel( file );
 
+		// Archive last deleted file
+		m_project.lastDeletedFile = {
+			"meta": m_project.files[ file.id ],
+			"content": m_filesContent[ file.id ],
+		};
+
 		// Delete the file
 		removeFileFromFolder( parent.id, file.id, callback );
 		delete m_project.files[ file.id ];
@@ -303,6 +331,17 @@ var g_file = ( function () {
 			}
 		} );
 		saveProject();
+	}
+
+	function restoreLastDeletedFile() {
+		if( m_project.lastDeletedFile ) {
+			createFile(
+				m_project.lastDeletedFile.meta,
+				m_project.lastDeletedFile.meta.path,
+				m_project.lastDeletedFile.content
+			);
+		}
+		m_project.lastDeletedFile = null;
 	}
 
 	function moveFile( pathSrc, pathDest ) {
@@ -350,6 +389,20 @@ var g_file = ( function () {
 		saveProject();
 
 		return true;
+	}
+
+	function renameFile( file, name ) {
+		let oldPath = file.fullpath;
+
+		file.name = name;
+		file.fullname = file.name + file.extension;
+		file.fullpath = file.path + "/" + file.fullname;
+		file.isChanged = true;
+
+		delete m_project.fileLookup[ oldPath ];
+		m_project.fileLookup[ file.fullpath ] = file.id;
+
+		saveProject();
 	}
 
 	function isSubfolder( baseFolder, folder ) {

@@ -178,6 +178,10 @@ var g_main = ( function ( $ ) {
 			null, deleteSelectedFiles
 		);
 		addMenuItem(
+			"File", "Undo Deleted file", "Restore the last deleted file.", "", { "key": "", "ctrlKey": false },
+			null, restoreDeletedFile
+		);
+		addMenuItem(
 			"Run", "Run", "Uploads your files and runs in a seperate window.", "Ctrl+R", { "key": "R", "ctrlKey": true },
 			[ monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyR ], function () { runProgram( false, true ); }
 		);
@@ -775,6 +779,11 @@ var g_main = ( function ( $ ) {
 		}
 	}
 
+	function restoreDeletedFile() {
+		g_file.restoreLastDeletedFile();
+		refreshFileView();
+	}
+
 	function refreshFileView() {
 		let $filesElement = $( ".file-viewer" );
 		$filesElement.find( "ul" ).remove();
@@ -1119,8 +1128,11 @@ var g_main = ( function ( $ ) {
 						}
 						selectedFile.isChanged = true;
 						defaultOp = "Moved file to: ";
-					} else {
+					} else if( tempName !== name ) {
 						defaultOp = "Updated file: ";
+						g_file.renameFile( selectedFile, name );
+					} else {
+						defaultOp = "No change: ";
 					}
 				}
 			} else {
