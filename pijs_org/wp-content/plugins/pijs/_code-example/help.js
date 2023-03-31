@@ -101,9 +101,19 @@ function printCommands( commands ) {
 			msg += "<div>&nbsp;</div>";
 			msg += "<div class='sectionTitle'>See Also:</div>";
 			msg += "<div class='tabbed'>";
+			let minWidth = 180;
 			for( j = 0; j < commands[ i ].seeAlso.length; j++ ) {
-				msg += "* <a href='#command_" + commands[ i ].seeAlso[ j ] + "' onclick='scrollToLink(event)'>" +
-					commands[ i ].seeAlso[ j ] + "</a> ";
+				let seeAlso = commands[ i ].seeAlso[ j ];
+				if(seeAlso.length * 13 > minWidth) {
+					minWidth = seeAlso.length * 13;
+				}
+			}
+			for( j = 0; j < commands[ i ].seeAlso.length; j++ ) {
+				let seeAlso = commands[ i ].seeAlso[ j ];
+				msg += "<div class='see-also' style='min-width:" + minWidth + "px;'>" +
+					"* " +
+					"<a href='#command_" + seeAlso + "' onclick='scrollToLink(event)'>" +
+					seeAlso + "</a>&nbsp;</div>";
 			}
 			msg += "</div>";
 		}

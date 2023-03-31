@@ -91,6 +91,11 @@ table.tabbed td, table.tabbed {
 	border: none;
 	font-size: inherit;
 }
+.see-also {
+	display: inline-block;
+	white-space: nowrap;
+	min-width: 210px;
+}
 canvas {
 	background-color: rgba(0,0,0,0.75);
 }

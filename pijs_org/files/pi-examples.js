@@ -175,6 +175,13 @@ $.setColor( 4 );
 $.print( pal[ 4 ].s );
 onExampleClose = function () {};
 }
+examples['getImage'] = function() {
+$.screen( "300x200" , 'canvasContainer');
+$.circle( 150, 110, 50, 4 );
+var circle = $.getImage( null, 100, 40, 200, 160 );
+$.drawImage( circle, 20, 80 );
+onExampleClose = function () {};
+}
 examples['getPal'] = function() {
 $.screen("300x200", 'canvasContainer');
 var pal = $.getPal();
@@ -346,7 +353,7 @@ onExampleClose = function () {};
 }
 examples['loadFont'] = function() {
 var font = $.loadFont( 
-  "gnsh-bitmapfont-colour2.png", 5, 12, 
+  "/images/gnsh-bitmapfont-colour2.png", 5, 12, 
   " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]" +
   "^_`abcdefghijklmnopqrstuvwxyz{|}~"
 );
@@ -721,14 +728,6 @@ $.ready( function () {
 } );
 onExampleClose = function () {};
 }
-examples['point'] = function() {
-$.screen( "300x200" , 'canvasContainer');
-$.setColor( 5 );
-$.pset( 55, 55 );
-var pixel = $.point( 55, 55 );
-$.print( pixel );
-onExampleClose = function () {};
-}
 examples['print'] = function() {
 $.screen( "300x200" , 'canvasContainer');
 $.print( "Welcome to PI JS", false, true );
@@ -806,6 +805,16 @@ $.screen( "300x200" , 'canvasContainer');
 $.setColor( 5 );
 $.rect( 25, 25, 150, 100, 2 );
 $.removeAllScreens();
+onExampleClose = function () {};
+}
+examples['removeImage'] = function() {
+$.screen( "300x200" , 'canvasContainer');
+var monkey = $.loadImage( "/images/monkey.png" );
+$.ready( function () {
+	$.drawImage( monkey, 150, 100, 0, 0.5, 0.5 );
+	$.removeImage( monkey );
+	$.drawImage( monkey, 200, 150 );
+} );
 onExampleClose = function () {};
 }
 examples['removeScreen'] = function() {
@@ -908,14 +917,17 @@ onExampleClose = function () {};
 examples['setBlendMode'] = function() {
 $.ready(function () {
 	$.screen( "5x5" , 'canvasContainer');
+	// draw 3 red pixels
 	$.setColor( "rgba(255,0,0,1)" );
 	$.pset( 1, 2 );
 	$.pset( 2, 2 );
 	$.pset( 3, 2 );
 	$.render();
-	$.setBlendMode( "blended" );
+	$.setBlendMode( "blend" );
+	// blend red and green
 	$.setColor( "rgba(0,255,0,0.5)" );
 	$.pset( 2, 2 );
+	// blend red and blue
 	$.setColor( "rgba(0,0,255,0.5)" );
 	$.pset( 3, 2 );
 });
@@ -1007,7 +1019,7 @@ for( var i = 0; i < 4; i++ ) {
 onExampleClose = function () {};
 }
 examples['setFontSize'] = function() {
-var font = $.loadFont( "font-block.png", 10, 10, "ABCDFGHI" );
+var font = $.loadFont( "/images/font-block.png", 10, 10, "ABCDFGHI" );
 $.ready( function () {
 	$.screen( "100x100" , 'canvasContainer');
 	$.setFont( font );
