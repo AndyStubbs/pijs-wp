@@ -62,6 +62,7 @@ var g_main = ( function ( $ ) {
 	let m_clickedOnRootFolder = null;
 	let m_reRuns = 0;
 	let m_freespaceTimeout = null;
+	let m_projectUrl = null;
 
 	return {
 		"init": init,
@@ -326,6 +327,7 @@ var g_main = ( function ( $ ) {
 					base_url = "https://www.pijs-run.org/";
 				}
 				let url = base_url + "runs/" + dataReturn.project_id;
+				m_projectUrl = url;
 				g_file.resetFilesChanged();
 				let w = null;
 				if( settings.isFullscreen ) {
@@ -337,6 +339,24 @@ var g_main = ( function ( $ ) {
 				if( w ) {
 					w.focus();
 				}
+			}
+		} );
+	}
+
+	function openProblems() {
+		let div = document.createElement( "div" );
+
+		div.innerHTML = "<p>" +
+			"If you are having troubles running your program. " +
+			"Please try the following link: " + 
+			"<a href='" + m_projectUrl + "' target='_blank'>" + m_projectUrl + "</a>." +
+				" You can keep that link in a seperate tab and run the Update command to then " +
+				"refresh that tab to run your code." +
+			"</p>"
+
+		g_layout.createPopup( "Troubles Running?", div, {
+			"okCommand": function () {
+				return true;
 			}
 		} );
 	}
@@ -860,7 +880,7 @@ var g_main = ( function ( $ ) {
 			checkClass = "checked";
 		}
 		div.classList.add( "project-settings-popup" );
-		div.innerHTML = "<p>" +
+		let projectSettingsContent = "<p>" +
 			"<span>Name:</span>&nbsp;&nbsp;" +
 			"<input id='project-name' type='text' value='" + settings.name + "' maxlength='255' /> " +
 			"</p><p>" +
@@ -872,13 +892,23 @@ var g_main = ( function ( $ ) {
 			"<span>Window Height:</span>&nbsp;&nbsp;" +
 			"<input id='project-height' type='number' value='" + settings.height + "' />" +
 			"</p><p style='text-align: center'>" +
-			"<input id='btn-download-project' type='button' value='Download Project' class='btn-retro button-wide btn-8-14' />" +
-			"</p>";
+			"<input id='btn-download-project' type='button' value='Download Project' class='btn-retro button-wide btn-8-14' />";
+
+		if( m_projectUrl !== null ) {
+			projectSettingsContent += "<input id='btn-run-problems' type='button' value='Run Problems?' class='btn-retro button-wide btn-8-14' />";
+		}
+		projectSettingsContent += "</p>";
+
+		div.innerHTML = projectSettingsContent;
 
 		g_layout.createPopup( "Project Settings", div, { "okCommand": function () {
 			updateProjectSettings();
 			return true;
 		}, "cancelCommand": function () {} } );
+
+		$( "#btn-run-problems" ).on( "click", function () {
+			openProblems();
+		} );
 
 		$( "#btn-download-project" ).on( "click", function () {
 			let settings = g_file.getProjectSettings();
@@ -1451,7 +1481,12 @@ var g_main = ( function ( $ ) {
 						if( ! zipEntry.dir ) {
 							if( zipEntry.name.endsWith( ".js" ) ) {
 								zip.file( zipEntry.name ).async( "string" ).then( function( data ) {
-									m_zipFileUploads.push( { "name": zipEntry.name, "content": data, "type": g_file.FILE_TYPE_SCRIPT } );
+									m_zipFileUploads.push( {
+										"name": zipEntry.name,
+										"content": data,
+										"type": g_file.FILE_TYPE_SCRIPT,
+										"size": g_util.getByteSize( data )
+									} );
 									clearTimeout( timeout );
 									timeout = setTimeout( () => checkUploadedFiles( div, false ), 100 );
 								} );

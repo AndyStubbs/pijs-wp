@@ -9,7 +9,7 @@ Author: Andy Stubbs
 
 class Pijs_Util {
 
-	private $interval = 'hourly';  // 15 minutes
+	private $interval = 'hourly';  // Ever Hour
 
 	function __construct() {
 		add_action( 'wp_loaded', array( $this, 'schedule_cron_jobs' ) );
