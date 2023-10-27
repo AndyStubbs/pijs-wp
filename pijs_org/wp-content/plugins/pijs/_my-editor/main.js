@@ -63,6 +63,8 @@ var g_main = ( function ( $ ) {
 	let m_reRuns = 0;
 	let m_freespaceTimeout = null;
 	let m_projectUrl = null;
+	let m_fileViews = {};
+	let m_activeFile = null;
 
 	return {
 		"init": init,
@@ -582,7 +584,9 @@ var g_main = ( function ( $ ) {
 			$( ".main-audio-viewer" ).hide();
 			$( ".main-editor-body" ).show();
 			if( !m_models[ file.id ] ) {
-				m_models[ file.id ] = g_editor.createModel( g_file.getFileContentById( file.id ), file.type );
+				m_models[ file.id ] = g_editor.createModel(
+					g_file.getFileContentById( file.id ), file.type
+				);
 				m_models[ file.id ].onDidChangeContent( function () {
 					g_file.setFileContent( file.id, m_models[ file.id ].getValue(), function () {
 						g_util.delay( refreshFileView, "refreshFileView", 100 );
@@ -590,7 +594,14 @@ var g_main = ( function ( $ ) {
 					} );
 				} );
 			}
+			if( m_activeFile && m_activeFile.type === g_file.FILE_TYPE_SCRIPT ) {
+				m_fileViews[ m_activeFile.id ] = g_editor.saveViewState();
+			}
 			g_editor.setModel( m_models[ file.id ] );
+			if( m_fileViews[ file.id ] ) {
+				g_editor.restoreViewState( m_fileViews[ file.id ] );
+			}
+			m_activeFile = file;
 		} else if( file.type === FILE_TYPE_IMAGE ) {
 			let $imageViewer = $( ".main-image-viewer" );
 			if( $imageViewer.data( "file" ) === file.fullpath ) {
@@ -791,6 +802,9 @@ var g_main = ( function ( $ ) {
 	function deleteSelectedFiles() {
 		let selectedFiles = getSelectedFiles();
 		for( let i = 0; i < selectedFiles.length; i++ ) {
+			if( selectedFiles[ i ] === m_activeFile ) {
+				m_activeFile = null;
+			}
 			g_file.deleteFile( selectedFiles[ i ].fullpath, updateFreespace );
 		}
 		if( selectedFiles.length > 0 ) {

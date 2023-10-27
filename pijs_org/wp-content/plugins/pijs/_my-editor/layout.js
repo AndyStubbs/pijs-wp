@@ -344,6 +344,14 @@ var g_layout = ( function ( $ ) {
 			}
 			let item = m_keys[ e.key.toUpperCase() ];
 			if( item ) {
+				if( item.name === "Delete file" ) {
+					if(
+						!document.querySelector( ".file-viewer" ).
+							classList.contains( "viewer-focused" )
+					) {
+						return;
+					}
+				}
 				if( e.ctrlKey === item.keybindingsLocal.ctrlKey ) {
 					item.command();
 					e.preventDefault();

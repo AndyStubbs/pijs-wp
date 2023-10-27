@@ -489,6 +489,7 @@ function pijs_get_latest_version_url( $fileStart, $fileEnd ) {
 			}
 		}
 	}
+	//$latestFile = 'pi-temp.js';
 	$fullPath = get_site_url() . '/files/' . $latestFile;
 	//error_log(  "Latest: $fullPath\n", 3, WP_CONTENT_DIR . '/debug.log' );
 	return $fullPath;

@@ -25,7 +25,9 @@ var g_editor = ( function () {
 		"resize": resize,
 		"createModel": createModel,
 		"setModel": setModel,
-		"addCommand": addCommand
+		"addCommand": addCommand,
+		"saveViewState": saveViewState,
+		"restoreViewState": restoreViewState
 	};
 
 	function init() {
@@ -68,6 +70,14 @@ var g_editor = ( function () {
 
 	function setModel( model ) {
 		activeEditor.setModel( model );
+	}
+
+	function saveViewState() {
+		return activeEditor.saveViewState();
+	}
+
+	function restoreViewState( state ) {
+		activeEditor.restoreViewState( state );
 	}
 
 	function resize() {
