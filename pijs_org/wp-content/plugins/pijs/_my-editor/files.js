@@ -18,6 +18,7 @@ var g_file = ( function () {
 		"createFile": createFile,
 		"createFileFromPath": createFileFromPath,
 		"deleteFile": deleteFile,
+		"deleteProject": deleteProject,
 		"init": init,
 		"getFilesFromFolder": getFilesFromFolder,
 		"getFileContentById": getFileContentById,
@@ -331,6 +332,13 @@ var g_file = ( function () {
 			}
 		} );
 		saveProject();
+	}
+
+	function deleteProject() {
+		let promise = g_myIndexDB.clear();
+		promise.then( function () {
+			location.reload();
+		} );
 	}
 
 	function restoreLastDeletedFile() {

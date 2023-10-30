@@ -906,7 +906,8 @@ var g_main = ( function ( $ ) {
 			"<span>Window Height:</span>&nbsp;&nbsp;" +
 			"<input id='project-height' type='number' value='" + settings.height + "' />" +
 			"</p><p style='text-align: center'>" +
-			"<input id='btn-download-project' type='button' value='Download Project' class='btn-retro button-wide btn-8-14' />";
+			"<input id='btn-delete-project' type='button' value='Delete' class='btn-retro button-wide btn-8-14' />" +
+			"<input id='btn-download-project' type='button' value='Download' class='btn-retro button-wide btn-8-14' />";
 
 		if( m_projectUrl !== null ) {
 			projectSettingsContent += "<input id='btn-run-problems' type='button' value='Run Problems?' class='btn-retro button-wide btn-8-14' />";
@@ -922,6 +923,14 @@ var g_main = ( function ( $ ) {
 
 		$( "#btn-run-problems" ).on( "click", function () {
 			openProblems();
+		} );
+
+		$( "#btn-delete-project" ).on( "click", function () {
+			g_layout.createPopup( "Delete Project", "Are you sure you want to delete this project?", {
+				"okCommand": function () {
+					g_file.deleteProject();
+				}, "cancelCommand": function () {}
+			} );
 		} );
 
 		$( "#btn-download-project" ).on( "click", function () {
