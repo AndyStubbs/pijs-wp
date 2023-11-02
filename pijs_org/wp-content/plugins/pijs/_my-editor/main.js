@@ -910,6 +910,7 @@ var g_main = ( function ( $ ) {
 			"<input id='btn-download-project' type='button' value='Download' class='btn-retro button-wide btn-8-14' />";
 
 		if( m_projectUrl !== null ) {
+			projectSettingsContent += "</p><p>";
 			projectSettingsContent += "<input id='btn-run-problems' type='button' value='Run Problems?' class='btn-retro button-wide btn-8-14' />";
 		}
 		projectSettingsContent += "</p>";
