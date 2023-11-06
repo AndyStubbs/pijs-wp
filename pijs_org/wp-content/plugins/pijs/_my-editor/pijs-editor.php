@@ -107,7 +107,7 @@ class Pijs_Editor {
 			'editor-util', plugins_url( 'util.js', __FILE__ ), null, '1.0', true
 		);
 		wp_register_script(
-			'editor-main', plugins_url( 'main.js', __FILE__ ), null, '1.0', true
+			'editor-main', plugins_url( 'main.js', __FILE__ ), null, '1.1', true
 		);
 		wp_register_script(
 			'editor-layout', plugins_url( 'layout.js', __FILE__ ), null, '1.0', true
