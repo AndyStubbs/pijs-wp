@@ -1133,12 +1133,23 @@ var selectorTool = ( function () {
 			finalizeSelection();
 		}
 
-		m_move.style.backgroundImage = "url(move" + img + ".png)";
-		for( i = 0; i < m_resizeTools.length; i++ ) {
-			m_resizeTools[ i ].element.style
-				.backgroundImage = "url(dot" + img + ".png)";
+		if( img === "" ) {
+			m_move.classList.add( "selectorMove2" );
+		} else {
+			m_move.classList.remove( "selectorMove2" );
 		}
-		m_rotateTool.style.backgroundImage = "url(rotate" + img + ".png)";
+		for( i = 0; i < m_resizeTools.length; i++ ) {
+			if( img === "" ) {
+				m_resizeTools[ i ].element.classList.add( "selectorDot2" );
+			} else {
+				m_resizeTools[ i ].element.classList.remove( "selectorDot2" );
+			}
+		}
+		if( img === "" ) {
+			m_rotateTool.classList.add( "selectorAngle2" );
+		} else {
+			m_rotateTool.classList.remove( "selectorAngle2" );
+		}
 		if( ! skipSelectionPixels ) {
 			refreshSelection();
 		}

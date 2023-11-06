@@ -643,6 +643,9 @@ div {
 	opacity: 0.85;
 	background-image: url(move2.png);
 }
+.selectorMove2 {
+	background-image: url(move.png) !important;
+}
 #selectorAngle {
 	width: 30px;
 	height: 30px;
@@ -660,6 +663,9 @@ div {
 	font-size: 14px;
 	line-height: 79px;
 }
+.selectorAngle2 {
+	background-image: url(rotate.png) !important;
+}
 .selectorDot {
 	width: 20px;
 	height: 20px;
@@ -673,6 +679,9 @@ div {
 	vertical-align: middle;
 	opacity: 0.85;
 	background-image: url(dot2.png);
+}
+.selectorDot2 {
+	background-image: url(dot.png) !important;
 }
 .controlPoint {
 	background-image: url(dot.png);
