@@ -938,7 +938,7 @@ var g_main = ( function ( $ ) {
 			let settings = g_file.getProjectSettings();
 			updateProjectSettings();
 			let indexHtml = HTML_TEMPLATE.replace( "[TITLE]", settings.name );
-			let scripts = [ "<script src='https://pijs.org/pi-latest.js'></script>" ];
+			let scripts = [ "<script src='https://pijs.org/files/pi-latest.js'></script>" ];
 			let zip = new JSZip();
 			zipProjectFiles( g_file.getFileById( 0 ), zip, scripts, "" );
 			indexHtml = indexHtml.replace( "[SCRIPTS]", scripts.join( "\n\t\t" ) );
