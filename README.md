@@ -10,9 +10,6 @@ This WordPress-powered website is designed to provide developers with tools, doc
 
 ---
 
-## **Website**
-Visit [pijs.org](https://pijs.org) to see website.
-
 ## **Key Features**
 
 ### **1. Interactive Code Editor**
