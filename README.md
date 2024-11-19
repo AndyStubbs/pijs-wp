@@ -1,4 +1,4 @@
-# Pi.js Official Website (`pijs.org`)
+# Pi.js Official Website ([pijs.org](https://pijs.org))
 
 Welcome to the repository for the **Pi.js official website**, the central hub for everything related to **Pi.js**, a JavaScript library for creating retro-inspired apps and games. Please note: **this repository only contains the website's code**. The source code for the Pi.js library itself is hosted in a separate repository.
 
