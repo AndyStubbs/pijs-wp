@@ -61,20 +61,25 @@
 	g_sounds = {};
 	g_soundsCreated = false;
 	g_isRunning = false;
-	g_highScores = [
-		[ "Sneaky Pirate - Highscores" ],
-		[ "#", "Name", "Score", "Level" ],
-		[ 1, "Henry Morgan", 4200, 6 ],
-		[ 2, "William Kidd", 2000, 5 ],
-		[ 3, "Francis Drake", 1200, 4 ],
-		[ 4, "Edward Teach", 1000, 4 ],
-		[ 5, "Mary Read", 600, 3 ],
-		[ 6, "Thomas Tew", 500, 3 ],
-		[ 7, "Henry Every", 250, 2 ],
-		[ 8, "Howell Davis", 200, 2 ],
-		[ 9, "Captain Hook", 50, 1 ],
-		[ 10, "Smee", 35, 1 ],
-	];
+	const scores = localStorage.getItem( "pirate-scores" );
+	if( scores ) {
+		g_highScores = JSON.parse( scores );
+	} else {
+		g_highScores = [
+			[ "Sneaky Pirate - Highscores" ],
+			[ "#", "Name", "Score", "Level" ],
+			[ 1, "Henry Morgan", 4200, 6 ],
+			[ 2, "William Kidd", 2000, 5 ],
+			[ 3, "Francis Drake", 1200, 4 ],
+			[ 4, "Edward Teach", 1000, 4 ],
+			[ 5, "Mary Read", 600, 3 ],
+			[ 6, "Thomas Tew", 500, 3 ],
+			[ 7, "Henry Every", 250, 2 ],
+			[ 8, "Howell Davis", 200, 2 ],
+			[ 9, "Captain Hook", 50, 1 ],
+			[ 10, "Smee", 35, 1 ],
+		];
+	}
 	g_levels = [
 		{
 			"name": "Parrot Bay",
@@ -1522,6 +1527,7 @@
 				scores[ scoreIndex ][ 1 ] = name;
 
 				g_highScores = scores.slice( 0, 12 );
+				localStorage.setItem( "pirate-scores", JSON.stringify( g_highScores ) );
 
 				// Print box
 				$.setColor( 0 );
